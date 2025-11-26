@@ -89,6 +89,8 @@ const FieldTemplate: React.FC<FieldTemplateProps> = ({
     shouldShowHandle = false;
   }
 
+  console.log("fieldId", `label-${nodeId}-${fieldId}`);
+
   return (
     <div
       className={cn(
@@ -96,9 +98,14 @@ const FieldTemplate: React.FC<FieldTemplateProps> = ({
         fromAnyOf && "mb-0",
         size === "small" ? "w-[350px]" : "w-full",
       )}
+      data-id={`field-${nodeId}-${fieldId}`}
     >
       {!isAnyOf && !fromAnyOf && label && (
-        <label htmlFor={fieldId} className="flex items-center gap-1">
+        <label
+          htmlFor={fieldId}
+          className="flex items-center gap-1"
+          data-id={`label-${nodeId}-${fieldId}`}
+        >
           {shouldShowHandle && (
             <NodeHandle
               handleId={handleId}
