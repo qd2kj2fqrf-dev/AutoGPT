@@ -89,8 +89,6 @@ const FieldTemplate: React.FC<FieldTemplateProps> = ({
     shouldShowHandle = false;
   }
 
-  console.log("fieldId", `label-${nodeId}-${fieldId}`);
-
   return (
     <div
       className={cn(
