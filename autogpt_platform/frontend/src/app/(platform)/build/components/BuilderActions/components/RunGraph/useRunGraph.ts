@@ -16,12 +16,12 @@ export const useRunGraph = () => {
     showToast: false,
   });
   const { toast } = useToast();
-  const setIsGraphRunning = useGraphStore(
-    useShallow((state) => state.setIsGraphRunning),
-  );
   const hasInputs = useGraphStore(useShallow((state) => state.hasInputs));
   const hasCredentials = useGraphStore(
     useShallow((state) => state.hasCredentials),
+  );
+  const setIsGraphRunning = useGraphStore(
+    useShallow((state) => state.setIsGraphRunning),
   );
   const [openRunInputDialog, setOpenRunInputDialog] = useState(false);
 
@@ -58,15 +58,15 @@ export const useRunGraph = () => {
   const { mutateAsync: executeGraph, isPending: isExecutingGraph } =
     usePostV1ExecuteGraphAgent({
       mutation: {
-        onSuccess: (response) => {
+        onSuccess: (response: any) => {
           const { id } = response.data as GraphExecutionMeta;
           setQueryStates({
             flowExecutionID: id,
           });
         },
-        onError: (error) => {
+        onError: (error: any) => {
+          // Reset running state on error
           setIsGraphRunning(false);
-
           toast({
             title: (error.detail as string) ?? "An unexpected error occurred.",
             description: "An unexpected error occurred.",
@@ -76,20 +76,19 @@ export const useRunGraph = () => {
       },
     });
 
-  const { mutateAsync: stopGraph } = usePostV1StopGraphExecution({
-    mutation: {
-      onSuccess: () => {
-        setIsGraphRunning(false);
+  const { mutateAsync: stopGraph, isPending: isTerminatingGraph } =
+    usePostV1StopGraphExecution({
+      mutation: {
+        onSuccess: () => {},
+        onError: (error: any) => {
+          toast({
+            title: (error.detail as string) ?? "An unexpected error occurred.",
+            description: "An unexpected error occurred.",
+            variant: "destructive",
+          });
+        },
       },
-      onError: (error) => {
-        toast({
-          title: (error.detail as string) ?? "An unexpected error occurred.",
-          description: "An unexpected error occurred.",
-          variant: "destructive",
-        });
-      },
-    },
-  });
+    });
 
   const handleRunGraph = async () => {
     await saveGraph(undefined);
@@ -97,6 +96,8 @@ export const useRunGraph = () => {
     if (hasInputs() || hasCredentials()) {
       setOpenRunInputDialog(true);
     } else {
+      // Optimistically set running state immediately for responsive UI
+      setIsGraphRunning(true);
       await executeGraph({
         graphId: flowID ?? "",
         graphVersion: flowVersion || null,
@@ -120,6 +121,7 @@ export const useRunGraph = () => {
     handleStopGraph,
     isSaving,
     isExecutingGraph,
+    isTerminatingGraph,
     openRunInputDialog,
     setOpenRunInputDialog: handleSetOpenRunInputDialog,
   };
