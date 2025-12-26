@@ -136,12 +136,14 @@ class EditVideoByTextBlock(Block):
         *,
         credentials: APIKeyCredentials,
         graph_exec_id: str,
+        user_id: str,
         **kwargs,
     ) -> BlockOutput:
         try:
             local_path = await store_media_file(
                 graph_exec_id=graph_exec_id,
                 file=input_data.video_in,
+                user_id=user_id,
                 return_content=False,
             )
             abs_path = get_exec_file_path(graph_exec_id, local_path)
