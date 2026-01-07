@@ -36,14 +36,14 @@ const FieldTemplate: React.FC<FieldTemplateProps> = ({
   uiSchema,
 }) => {
   const { isInputConnected } = useEdgeStore();
-  const {
-    nodeId,
-    showHandles = true,
-    size = "small",
-    brokenInputs,
-    typeMismatchInputs,
-  } = formContext;
+  const { nodeId, showHandles = true, size = "small" } = formContext;
   const uiType = formContext.uiType;
+
+  // Get helpers from nodeStore for broken inputs and type mismatches
+  const isInputBroken = useNodeStore((state) => state.isInputBroken);
+  const getInputTypeMismatch = useNodeStore(
+    (state) => state.getInputTypeMismatch,
+  );
 
   const showAdvanced = useNodeStore(
     (state) => state.nodeAdvancedStates[nodeId] ?? false,
@@ -78,11 +78,11 @@ const FieldTemplate: React.FC<FieldTemplateProps> = ({
   }
 
   const isConnected = showHandles ? isInputConnected(nodeId, handleId) : false;
-  // Check if this input is broken (from formContext, passed by FormCreator)
-  const isBroken = handleId ? (brokenInputs?.has(handleId) ?? false) : false;
+  // Check if this input is broken using nodeStore helper
+  const isBroken = handleId ? isInputBroken(nodeId, handleId) : false;
   // Check if this input has a type mismatch, and get the new type if so
   const newTypeFromMismatch = handleId
-    ? (typeMismatchInputs as Map<string, string> | undefined)?.get(handleId)
+    ? getInputTypeMismatch(nodeId, handleId)
     : undefined;
   const hasTypeMismatch = !!newTypeFromMismatch;
 

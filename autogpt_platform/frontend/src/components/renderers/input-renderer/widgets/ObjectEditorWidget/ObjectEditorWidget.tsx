@@ -7,6 +7,7 @@ import { Button } from "@/components/atoms/Button/Button";
 import { Input } from "@/components/atoms/Input/Input";
 import NodeHandle from "@/app/(platform)/build/components/FlowEditor/handlers/NodeHandle";
 import { useEdgeStore } from "@/app/(platform)/build/stores/edgeStore";
+import { useNodeStore } from "@/app/(platform)/build/stores/nodeStore";
 import {
   generateHandleId,
   HandleIdType,
@@ -23,8 +24,6 @@ export interface ObjectEditorProps {
   className?: string;
   nodeId: string;
   fieldKey: string;
-  brokenInputs?: Set<string>;
-  typeMismatchInputs?: Map<string, string>; // Map of input name -> new type
 }
 
 export const ObjectEditor = React.forwardRef<HTMLDivElement, ObjectEditorProps>(
@@ -37,13 +36,17 @@ export const ObjectEditor = React.forwardRef<HTMLDivElement, ObjectEditorProps>(
       disabled = false,
       className,
       nodeId,
-      brokenInputs,
-      typeMismatchInputs,
     },
     ref,
   ) => {
     const getAllHandleIdsOfANode = useEdgeStore(
       (state) => state.getAllHandleIdsOfANode,
+    );
+
+    // Get helpers from nodeStore for broken inputs and type mismatches
+    const isInputBroken = useNodeStore((state) => state.isInputBroken);
+    const getInputTypeMismatch = useNodeStore(
+      (state) => state.getInputTypeMismatch,
     );
     const setProperty = (key: string, propertyValue: any) => {
       if (!onChange) return;
@@ -111,11 +114,9 @@ export const ObjectEditor = React.forwardRef<HTMLDivElement, ObjectEditorProps>(
             HandleIdType.KEY_VALUE,
           );
           const isDynamicPropertyConnected = isInputConnected(nodeId, handleId);
-          const isBroken = handleId
-            ? (brokenInputs?.has(handleId) ?? false)
-            : false;
+          const isBroken = handleId ? isInputBroken(nodeId, handleId) : false;
           const newTypeFromMismatch = handleId
-            ? typeMismatchInputs?.get(handleId)
+            ? getInputTypeMismatch(nodeId, handleId)
             : undefined;
           const hasTypeMismatch = !!newTypeFromMismatch;
 

@@ -13,6 +13,7 @@ import { InfoIcon } from "@phosphor-icons/react";
 import { useAnyOfField } from "./useAnyOfField";
 import NodeHandle from "@/app/(platform)/build/components/FlowEditor/handlers/NodeHandle";
 import { useEdgeStore } from "@/app/(platform)/build/stores/edgeStore";
+import { useNodeStore } from "@/app/(platform)/build/stores/nodeStore";
 import { generateHandleId } from "@/app/(platform)/build/components/FlowEditor/handlers/helpers";
 import { getTypeDisplayInfo } from "@/app/(platform)/build/components/FlowEditor/nodes/helpers";
 import merge from "lodash/merge";
@@ -58,21 +59,18 @@ export const AnyOfField = ({
 
   const updatedFormContext = { ...formContext, fromAnyOf: true };
 
-  const {
-    nodeId,
-    showHandles = true,
-    brokenInputs,
-    typeMismatchInputs,
-  } = updatedFormContext;
+  const { nodeId, showHandles = true } = updatedFormContext;
   const { isInputConnected } = useEdgeStore();
   const isConnected = showHandles ? isInputConnected(nodeId, handleId) : false;
-  // Check if this input is broken (from formContext, passed by FormCreator)
-  const isBroken = handleId
-    ? ((brokenInputs as Set<string> | undefined)?.has(handleId) ?? false)
-    : false;
-  // Check if this input has a type mismatch, and get the new type if so
+
+  // Get helpers from nodeStore for broken inputs and type mismatches
+  const isInputBroken = useNodeStore((state) => state.isInputBroken);
+  const getInputTypeMismatch = useNodeStore(
+    (state) => state.getInputTypeMismatch,
+  );
+  const isBroken = handleId ? isInputBroken(nodeId, handleId) : false;
   const newTypeFromMismatch = handleId
-    ? (typeMismatchInputs as Map<string, string> | undefined)?.get(handleId)
+    ? getInputTypeMismatch(nodeId, handleId)
     : undefined;
   const hasTypeMismatch = !!newTypeFromMismatch;
   const {

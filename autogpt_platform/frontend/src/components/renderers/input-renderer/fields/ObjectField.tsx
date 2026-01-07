@@ -27,7 +27,7 @@ export const ObjectField = (props: FieldProps) => {
   }
 
   const fieldKey = generateHandleId(idSchema.$id ?? "");
-  const { nodeId, brokenInputs, typeMismatchInputs } = formContext;
+  const { nodeId } = formContext;
 
   return (
     <ObjectEditor
@@ -37,8 +37,6 @@ export const ObjectField = (props: FieldProps) => {
       value={formData}
       onChange={onChange}
       placeholder={`Enter ${name || "Contact Data"}`}
-      brokenInputs={brokenInputs}
-      typeMismatchInputs={typeMismatchInputs}
     />
   );
 };

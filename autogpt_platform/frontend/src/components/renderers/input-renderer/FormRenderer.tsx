@@ -13,8 +13,6 @@ type FormContextType = {
   uiType?: BlockUIType;
   showHandles?: boolean;
   size?: "small" | "medium" | "large";
-  brokenInputs?: Set<string>;
-  typeMismatchInputs?: Map<string, string>; // Map of input name -> new type
 };
 
 type FormRendererProps = {
