@@ -1,4 +1,5 @@
 # JRD PETROWISE: FINAL ARCHITECTURE SUMMARY
+
 ## From Design Vision to Production Implementation Plan
 
 **Status:** ✅ ARCHITECTURE COMPLETE - READY FOR IMPLEMENTATION  
@@ -28,6 +29,7 @@
 ## 📊 ARCHITECTURE LAYERS
 
 ### Layer 1: API Discovery Engine (Weeks 1-4)
+
 ```
 System Scanner → Service Detection → OpenAPI Fetching → Endpoint Registration
 ↓
@@ -35,6 +37,7 @@ Result: 1,000+ endpoints from 5 services (Fuel, Auto, Price-O-Tron, Jumbotron, S
 ```
 
 **How it works:**
+
 1. Scans ports 8001-8005 for running services
 2. Fetches OpenAPI specs (or introspects if unavailable)
 3. Registers all endpoints in database
@@ -46,6 +49,7 @@ Result: 1,000+ endpoints from 5 services (Fuel, Auto, Price-O-Tron, Jumbotron, S
 ---
 
 ### Layer 2: Unified Data Layer (Weeks 5-8)
+
 ```
 JRD Fuel → Aggregation Layer → Unified Metrics Dashboard
 JRD Auto → Aggregation Layer → Real-time Analytics
@@ -55,6 +59,7 @@ Scanotron → Aggregation Layer → Data Quality
 ```
 
 **Capabilities:**
+
 - Real-time fuel transaction streaming
 - Fleet utilization analysis
 - Cost trend analysis
@@ -65,11 +70,13 @@ Scanotron → Aggregation Layer → Data Quality
 ---
 
 ### Layer 3: Orchestration Engine (Weeks 9-12)
+
 ```
 Flow Builder → Flow Executor → Sandbox Environment → Production
 ```
 
 **Features:**
+
 - 8+ specialized flow node types (fuel-operation, auto-service, price-check, etc.)
 - Sandbox environments for safe testing
 - Error recovery with retry logic
@@ -82,16 +89,19 @@ Flow Builder → Flow Executor → Sandbox Environment → Production
 ### Layer 4: Three-Client Presentation (Weeks 13-16)
 
 **Windows (Copilot):**
+
 - Enterprise desktop with full-screen dashboard
 - Advanced flow builder
 - Multi-monitor support
 
 **macOS (Claude):**
+
 - Native SwiftUI, menu bar access
 - Keyboard shortcuts (⌘K search, ⌘N new)
 - Power user optimized
 
 **iOS (Claude):**
+
 - Quick fuel/service logging
 - Real-time alerts
 - Biometric auth (Face ID)
@@ -106,12 +116,14 @@ All three clients share the same backend, same API, same data.
 ### Why It Matters
 
 Traditional integration platforms require:
+
 - ✗ Manual API configuration
 - ✗ Copy/pasting API URLs
 - ✗ Manual documentation of endpoints
 - ✗ Fragile integrations when services change
 
 **JRD PetroWise:**
+
 - ✓ Automatic service discovery (scan network)
 - ✓ Automatic API fetching (OpenAPI specs)
 - ✓ Automatic endpoint registration
@@ -170,9 +182,11 @@ Trigger: Daily at 9 AM
 ## 📁 THREE DOCUMENTS CREATED
 
 ### 1. JRD_PETROWISE_ARCHITECTURE.md (26KB)
+
 **What:** Complete technical architecture specification
 
 **Contains:**
+
 - Vision statement
 - Architecture diagram (4 layers)
 - API Discovery Engine specification
@@ -189,9 +203,11 @@ Trigger: Daily at 9 AM
 ---
 
 ### 2. API_DISCOVERY_IMPLEMENTATION.md (18KB)
+
 **What:** Copy/paste implementation guide for API Discovery
 
 **Contains:**
+
 - Service definitions (ports 8001-8005)
 - APIDiscoveryService class (TypeScript)
 - System scanning logic
@@ -206,6 +222,7 @@ Trigger: Daily at 9 AM
 **For:** Backend developers implementing discovery
 
 **Get Started:**
+
 ```bash
 npm install axios
 # Copy APIDiscoveryService.ts into src/services/
@@ -216,9 +233,11 @@ npm install axios
 ---
 
 ### 3. JRD_PETROWISE_ROADMAP.md (16KB)
+
 **What:** 18-week sprint-by-sprint implementation plan
 
 **Contains:**
+
 - Full roadmap (18 weeks, 5 phases)
 - Week-by-week deliverables
 - Go/No-Go decision gates
@@ -228,6 +247,7 @@ npm install axios
 - Blockers + risk management
 
 **Key Sprints:**
+
 - **Sprint 1-2 (Weeks 1-2):** API Discovery running, 1,000+ endpoints registered
 - **Sprint 2-6 (Weeks 3-8):** Data layer aggregating real-time data
 - **Sprint 6-12 (Weeks 9-12):** Orchestration engine stable, 20+ templates
@@ -240,20 +260,23 @@ npm install axios
 ## 📦 WHAT'S INCLUDED IN ARCHITECTURE
 
 ### Backend Infrastructure
+
+- ✅ Unified backend for all clients (Node.js 20+ with Express, TypeORM, Socket.IO)
 - ✅ API Discovery Engine (auto-detect + fetch APIs)
 - ✅ Service detection (5 JRD applications)
 - ✅ OpenAPI parsing (1,000+ endpoints)
 - ✅ Fallback introspection (if no OpenAPI spec)
-- ✅ Endpoint registration (database)
+- ✅ Endpoint registration (PostgreSQL database)
 - ✅ REST API routes (scan, list, search)
 - ✅ Real-time WebSocket streaming
 - ✅ Data aggregation layer
 - ✅ Flow execution engine
 - ✅ Sandbox environments
 - ✅ Error recovery + retry logic
-- ✅ Comprehensive logging
+- ✅ Comprehensive logging and diagnostics
 
 ### Three Clients
+
 - ✅ Windows app (WinUI 3, .NET 8)
 - ✅ macOS app (SwiftUI, native)
 - ✅ iOS app (SwiftUI, native)
@@ -264,6 +287,7 @@ npm install axios
 - ✅ Theme system (Copper Tide, Mint Voltage, Solar Drift)
 
 ### Data Aggregation
+
 - ✅ Fuel operations (342+ endpoints from JRD Fuel)
 - ✅ Auto operations (278+ endpoints from JRD Auto)
 - ✅ Pricing intelligence (Price-O-Tron)
@@ -274,6 +298,7 @@ npm install axios
 - ✅ Anomaly detection
 
 ### Security
+
 - ✅ JWT authentication (15min access, 7day refresh)
 - ✅ OAuth 2.0 (Google, Apple, Microsoft)
 - ✅ Biometric auth (platform-native)
@@ -288,12 +313,14 @@ npm install axios
 ## 🎯 IMMEDIATE NEXT STEPS (This Week)
 
 ### 1. Review Architecture (3-4 hours)
+
 - [ ] Read JRD_PETROWISE_ARCHITECTURE.md (45 min)
 - [ ] Read API_DISCOVERY_IMPLEMENTATION.md (30 min)
 - [ ] Review JRD_PETROWISE_ROADMAP.md (40 min)
 - [ ] Identify questions + concerns
 
 ### 2. Identify Existing App Details
+
 - [ ] Confirm ports for JRD Fuel (currently assuming 8001)
 - [ ] Confirm ports for JRD Auto (currently assuming 8002)
 - [ ] Confirm ports for Price-O-Tron, Jumbotron, Scanotron
@@ -301,11 +328,13 @@ npm install axios
 - [ ] Locate data directories on your machine
 
 ### 3. Set Up Development Environment
+
 - [ ] Node.js 20+ installed
 - [ ] PostgreSQL running (or Docker)
 - [ ] npm packages ready (express, typeorm, axios, socket.io)
 
 ### 4. Monday Morning: Begin Sprint 1
+
 - [ ] Start API Discovery Engine implementation
 - [ ] Follow API_DISCOVERY_IMPLEMENTATION.md
 - [ ] Build system scanner first
@@ -335,6 +364,7 @@ npm install axios
 ## ✅ SUCCESS INDICATORS
 
 **You'll know API Discovery is working when:**
+
 - ✓ Backend discovers 5 services on first scan
 - ✓ 1,000+ endpoints registered
 - ✓ `/api/discovery/scan` returns services + endpoints
@@ -343,6 +373,7 @@ npm install axios
 - ✓ Zero unfilled API areas
 
 **You'll know Data Aggregation is working when:**
+
 - ✓ Real-time fuel transactions appearing on dashboard
 - ✓ Real-time auto service updates appearing
 - ✓ Pricing data updating automatically
@@ -350,6 +381,7 @@ npm install axios
 - ✓ WebSocket latency <1 second
 
 **You'll know Orchestration is working when:**
+
 - ✓ 20+ template workflows available
 - ✓ User can build custom flows by dragging
 - ✓ Flows execute reliably (>99% success)
@@ -357,6 +389,7 @@ npm install axios
 - ✓ Error recovery with 3 retries
 
 **You'll know Clients are ready when:**
+
 - ✓ Windows app showing real-time metrics
 - ✓ macOS app menu bar integration working
 - ✓ iOS app logging fuel/auto transactions
@@ -368,7 +401,7 @@ npm install axios
 ## 📊 KEY METRICS
 
 | Metric | Target |
-|--------|--------|
+| -------- | -------- |
 | Services Discovered | 5 |
 | Endpoints Available | 1,000+ |
 | API Response Time | <500ms p95 |
@@ -450,4 +483,3 @@ You have a **comprehensive, realistic, production-ready architecture** for JRD P
 **Status:** ✅ READY FOR IMPLEMENTATION  
 **Next Step:** Begin Sprint 1 Monday morning  
 **Expected MVP:** 18 weeks from start
-

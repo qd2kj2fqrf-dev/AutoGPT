@@ -3,7 +3,39 @@
 
 ---
 
-## 📋 THIS WEEK: REVIEW PHASE
+This Will be a comprehensive build out
+<!-- Remove placeholder and add high-impact prompts for agent-driven design, logic, and implementation. -->
+
+---
+
+### 🚦 Before You Start: Think Like an Architect, Builder, and Tester
+
+#### **Design Prompts**
+- What are the *core abstractions* and *responsibilities* for each service? Sketch a diagram or write a paragraph for each.
+- How will you ensure *loose coupling* and *high cohesion* between modules?
+- What are the *failure modes* for each service? How will you detect and recover from them?
+- How will you *document* and *version* your APIs for future teams?
+- What *security boundaries* exist between services? Where do you need authentication, authorization, or rate limiting?
+- How will you *scale* each service independently? What are your partitioning/sharding strategies?
+
+#### **Logic & Reasoning Prompts**
+- What are the *critical paths* in API discovery and registration? Where could bottlenecks or race conditions occur?
+- How will you *validate* that all endpoints are correctly discovered and registered?
+- What *edge cases* could break discovery (e.g., missing specs, network flakiness, partial failures)?
+- How will you *test* for correctness, performance, and resilience? What does a “passing” test look like?
+- What *metrics* and *logs* will you emit to prove the system is working as intended?
+
+#### **Implementation Prompts**
+- What *interfaces* and *types* will you define up front to enforce contracts between modules?
+- How will you *mock* or *simulate* services for local development and CI?
+- What is your *error handling* and *retry* strategy for failed service calls?
+- How will you *automate* setup, teardown, and data seeding for repeatable local runs?
+- What *tooling* (linters, formatters, CI/CD) will you enable from day one?
+- How will you *review* and *merge* code to maintain quality and velocity?
+
+---
+
+**Agents:** Use these prompts as a checklist before, during, and after each sprint. Document your answers, challenge assumptions, and share findings with the team. If you can’t answer a prompt, raise it in standup or retro—don’t let gaps go unnoticed!
 
 ### Monday-Wednesday (3-4 hours total)
 
