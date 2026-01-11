@@ -90,7 +90,7 @@ Auto-discovery + dynamic API pulling. Users don't manually configure integration
 4. User clicks "Refresh APIs" button
 5. Engine fetches OpenAPI specs from all discovered services
 6. All APIs instantly available for flow building
-7. Zero manual configuration needed
+7. Minimal manual configuration (just ensure services are running)
 ```
 
 ### Technical Implementation
@@ -604,7 +604,7 @@ class EnvironmentDetector {
 
 ## 🚀 IMPLEMENTATION ROADMAP (UPDATED)
 
-### Phase 2A: API Discovery Engine (Weeks 1-4)
+### Phase 1: API Discovery Engine (Weeks 1-4)
 
 **Week 1-2: Discovery Infrastructure**
 - [ ] System scanner (ports, files, databases)
@@ -618,7 +618,7 @@ class EnvironmentDetector {
 - [ ] Real-time capability detection
 - [ ] Fallback introspection (if no OpenAPI)
 
-### Phase 2B: Unified Data Layer (Weeks 5-8)
+### Phase 2: Unified Data Layer (Weeks 5-8)
 
 - [ ] Fuel data aggregation
 - [ ] Auto data aggregation
@@ -626,20 +626,20 @@ class EnvironmentDetector {
 - [ ] Real-time data streaming
 - [ ] Historical data warehouse
 
-### Phase 2C: Orchestration (Weeks 9-12)
+### Phase 3: Orchestration (Weeks 9-12)
 
 - [ ] Enhanced flow nodes (fuel-operation, auto-service, etc.)
 - [ ] Sandbox environments
 - [ ] Buildable workflows
 - [ ] Execution logging
 
-### Phase 2D: 3 Clients (Weeks 13-16)
+### Phase 4: Client Development (Weeks 13-16)
 
 - [ ] Windows app (enterprise desktop)
 - [ ] macOS app (power user)
 - [ ] iOS app (field operations)
 
-### Phase 2E: Testing + Launch (Weeks 17-18)
+### Phase 5: Testing + Launch (Weeks 17-18)
 
 - [ ] Cross-platform testing
 - [ ] Performance optimization
@@ -727,7 +727,7 @@ class APICompleteValidator {
 ## 🎯 SUCCESS CRITERIA
 
 ✅ **API Discovery:** Discovers 100% of available endpoints on first scan  
-✅ **No Manual Config:** User never manually enters API URLs  
+✅ **Minimal Config:** User only ensures services are running on expected ports  
 ✅ **One-Click:** "Refresh APIs" button pulls all available endpoints  
 ✅ **Complete Coverage:** Every discovered endpoint is usable  
 ✅ **Auto-Customization:** UI adapts to user's network/file topology  

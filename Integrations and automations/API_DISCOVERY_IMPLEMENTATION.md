@@ -2,14 +2,14 @@
 ## The Core Feature That Makes It Work
 
 **What This Does:**  
-Automatically scans your network/local machine, discovers all JRD applications (Fuel, Auto, Price-O-Tron, Jumbotron, Scanotron), pulls their API specs, and makes ALL endpoints available for flow building with zero manual configuration.
+Automatically scans your network/local machine, discovers all JRD applications (Fuel, Auto, Price-O-Tron, Jumbotron, Scanotron), pulls their API specs, and makes ALL endpoints available for flow building with minimal manual configuration.
 
 **User Experience:**
 1. User opens JRD PetroWise
 2. System automatically scans (background)
 3. User clicks "Refresh APIs" button
 4. All endpoints instantly available
-5. Drag-and-drop flows with zero manual setup
+5. Drag-and-drop flows with minimal manual setup
 
 ---
 
@@ -727,19 +727,26 @@ Add to `package.json`:
     "express": "^4.18.2",
     "axios": "^1.6.0",
     "cors": "^2.8.5",
-    "dotenv": "^16.3.1"
+    "dotenv": "^16.3.1",
+    "pg": "^8.11.0",
+    "typeorm": "^0.3.17",
+    "socket.io": "^4.7.0",
+    "helmet": "^7.1.0"
   },
   "devDependencies": {
     "@types/express": "^4.17.17",
     "@types/node": "^20.3.1",
-    "typescript": "^5.1.3"
+    "@types/cors": "^2.8.17",
+    "typescript": "^5.1.3",
+    "ts-node": "^10.9.0"
   }
 }
 ```
 
 Install:
 ```bash
-npm install axios
+npm install express axios cors dotenv pg typeorm socket.io helmet
+npm install --save-dev @types/express @types/node @types/cors typescript ts-node
 ```
 
 ---
@@ -806,11 +813,11 @@ curl http://localhost:3000/api/discovery/status
 ## 🎯 SUCCESS INDICATORS
 
 ✅ Services detected: 5 (Fuel, Auto, Price-O-Tron, Jumbotron, Scanotron)  
-✅ Total endpoints discovered: 1,000+  
+✅ Total endpoints discovered: 900+  
 ✅ OpenAPI parsing: Working  
 ✅ Fallback introspection: Available  
 ✅ Frontend scan button: Functional  
-✅ No manual configuration: Required ✓  
+✅ Minimal configuration: Only ensure services are running ✓  
 
 ---
 

@@ -1,10 +1,14 @@
 # JRD PETROWISE: 18-WEEK IMPLEMENTATION ROADMAP
 ## Building the Enterprise Integration & Automation Platform
 
-**Project:** JRD PetroWise  
-**Timeline:** 18 weeks (600+ engineering hours)  
-**Teams:** Copilot (Backend + Windows), Claude (Features + iOS/macOS)  
+**Project:** JRD PetroWise
+**Timeline:** 18 weeks (640+ engineering hours)
+**Teams:** Copilot (Backend + Windows), Claude (Features + iOS/macOS)
 **Status:** Architecture Complete → Ready for Sprint 1
+
+> **Team Naming:** "Copilot" and "Claude" refer to AI-assisted development workstreams:
+> - **Copilot** = GitHub Copilot-assisted development (backend APIs, Windows/.NET)
+> - **Claude** = Claude-assisted development (features, iOS/macOS Swift)
 
 ---
 
@@ -145,7 +149,7 @@ database/migrations/001_integration_endpoints.sql (500 lines)
 ```
 ✓ Backend running on localhost:3000
 ✓ 5 services discovered (Fuel, Auto, Price-O-Tron, Jumbotron, Scanotron)
-✓ 1,000+ endpoints registered
+✓ 900+ endpoints registered
 ✓ API discovery routes functional (/api/discovery/scan, /api/discovery/endpoints)
 ✓ Tests: 20+ passing
 ✓ No unfilled API areas detected
@@ -658,7 +662,7 @@ Swift Package Structure:
 - **Phase 4:** Windows App (weeks 13-14)
 - **Phase 5:** Security + Launch (week 18)
 
-**Time:** 220 hours
+**Time:** 320 hours
 
 ### Claude (Features + iOS/macOS)
 - **Phase 2:** Fuel (week 5), Auto (week 6), Real-time (week 8)
@@ -666,7 +670,9 @@ Swift Package Structure:
 - **Phase 4:** macOS + iOS (weeks 15-16)
 - **Phase 5:** Testing (week 17), Documentation
 
-**Time:** 240 hours
+**Time:** 320 hours
+
+**Total:** 640+ engineering hours
 
 ### Both Teams
 - **Phase 3:** Enhanced nodes planning (week 9)
@@ -678,7 +684,7 @@ Swift Package Structure:
 
 | Metric | Target | Notes |
 |--------|--------|-------|
-| **API Discovery** | 1,000+ endpoints | All 5 services + enterprise apps |
+| **API Discovery** | 900+ endpoints | All 5 services + enterprise apps |
 | **API Response Time** | <500ms p95 | Includes database + network |
 | **Real-time Latency** | <1s end-to-end | WebSocket updates |
 | **Code Coverage** | ≥80% | Unit + integration tests |
@@ -700,7 +706,7 @@ Swift Package Structure:
 ```
 PASS if:
 ✓ 5 services discovered
-✓ 1,000+ endpoints registered
+✓ 900+ endpoints registered
 ✓ /api/discovery/scan working
 ✓ Discovery tests passing
 

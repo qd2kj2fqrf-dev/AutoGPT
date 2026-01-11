@@ -1,16 +1,13 @@
 # JRD PETROWISE: QUICK START REFERENCE
+
 ## One-Page Guide to Getting Started
-
----
-
-This Will be a comprehensive build out
-<!-- Remove placeholder and add high-impact prompts for agent-driven design, logic, and implementation. -->
 
 ---
 
 ### 🚦 Before You Start: Think Like an Architect, Builder, and Tester
 
 #### **Design Prompts**
+
 - What are the *core abstractions* and *responsibilities* for each service? Sketch a diagram or write a paragraph for each.
 - How will you ensure *loose coupling* and *high cohesion* between modules?
 - What are the *failure modes* for each service? How will you detect and recover from them?
@@ -19,6 +16,7 @@ This Will be a comprehensive build out
 - How will you *scale* each service independently? What are your partitioning/sharding strategies?
 
 #### **Logic & Reasoning Prompts**
+
 - What are the *critical paths* in API discovery and registration? Where could bottlenecks or race conditions occur?
 - How will you *validate* that all endpoints are correctly discovered and registered?
 - What *edge cases* could break discovery (e.g., missing specs, network flakiness, partial failures)?
@@ -26,6 +24,7 @@ This Will be a comprehensive build out
 - What *metrics* and *logs* will you emit to prove the system is working as intended?
 
 #### **Implementation Prompts**
+
 - What *interfaces* and *types* will you define up front to enforce contracts between modules?
 - How will you *mock* or *simulate* services for local development and CI?
 - What is your *error handling* and *retry* strategy for failed service calls?
@@ -40,24 +39,28 @@ This Will be a comprehensive build out
 ### Monday-Wednesday (3-4 hours total)
 
 **Step 1: Read the Architecture**
+
 ```
 JRD_PETROWISE_ARCHITECTURE.md (45 min)
 └─ Understand: 4 layers, 5 services, 1,000+ endpoints, API Discovery
 ```
 
 **Step 2: Read the Implementation**
+
 ```
 API_DISCOVERY_IMPLEMENTATION.md (30 min)
 └─ Understand: How API Discovery works, copy/paste code ready
 ```
 
 **Step 3: Review the Roadmap**
+
 ```
 JRD_PETROWISE_ROADMAP.md (40 min)
 └─ Understand: 18 weeks, 5 phases, Go/No-Go gates
 ```
 
 **Step 4: Identify Your Setup**
+
 ```
 Check your system:
   □ JRD Fuel API: What port? (assuming 8001)
@@ -75,17 +78,19 @@ Check your system:
 
 ### What You'll Build (Week 1)
 
-**Goal:** API Discovery Engine detecting services and registering 1,000+ endpoints
+**Goal:** API Discovery Engine detecting services and registering 900+ endpoints
 
 ### Step 1: Initialize Node.js Project
+
 ```bash
 cd backend
 npm init -y
-npm install express cors dotenv helmet axios socket.io
-npm install --save-dev typescript @types/node @types/express
+npm install express cors dotenv helmet axios socket.io pg typeorm
+npm install --save-dev typescript @types/node @types/express @types/cors ts-node
 ```
 
 ### Step 2: Project Structure
+
 ```
 backend/
 ├─ src/
@@ -102,6 +107,7 @@ backend/
 ```
 
 ### Step 3: Copy Code
+
 ```bash
 # From API_DISCOVERY_IMPLEMENTATION.md:
 # 1. Copy APIDiscoveryService class → src/services/APIDiscoveryService.ts
@@ -110,6 +116,7 @@ backend/
 ```
 
 ### Step 4: Configure Ports
+
 ```typescript
 // src/config/environment.ts
 const JRD_SERVICES = [
@@ -122,6 +129,7 @@ const JRD_SERVICES = [
 ```
 
 ### Step 5: Start Services & Backend
+
 ```bash
 # Terminal 1: Make sure JRD services running
 # JRD Fuel on port 8001
@@ -136,6 +144,7 @@ npm run dev
 ```
 
 ### Step 6: Test Discovery
+
 ```bash
 # Terminal 3: Trigger API discovery
 curl http://localhost:3000/api/discovery/scan
@@ -157,6 +166,7 @@ curl http://localhost:3000/api/discovery/scan
 ```
 
 ### Step 7: Check Endpoints
+
 ```bash
 # Get all discovered endpoints
 curl http://localhost:3000/api/discovery/endpoints
@@ -184,6 +194,7 @@ curl http://localhost:3000/api/discovery/endpoints?query=transaction
 ## 🛠 COMMON COMMANDS
 
 ### Development
+
 ```bash
 npm run dev              # Start with hot reload
 npm run build          # Compile TypeScript
@@ -192,6 +203,7 @@ npm run lint           # Check code style
 ```
 
 ### Testing
+
 ```bash
 curl http://localhost:3000/api/discovery/scan
 curl http://localhost:3000/api/discovery/endpoints
@@ -200,6 +212,7 @@ curl http://localhost:3000/api/discovery/status
 ```
 
 ### Git
+
 ```bash
 git status             # Check status
 git add .              # Stage all changes
@@ -216,7 +229,7 @@ git log --oneline      # View commits
 |--------|--------|------|
 | API Discovery Engine | 🚀 Ready to code | Week 1 |
 | Services Detected | 0 → 5 | Week 2 |
-| Endpoints Registered | 0 → 917 | Week 4 |
+| Endpoints Registered | 0 → 900+ | Week 4 |
 | Data Aggregation | 📋 Planned | Week 5 |
 | Orchestration | 📋 Planned | Week 9 |
 | Three Clients | 📋 Planned | Week 13 |
@@ -246,12 +259,14 @@ A: Week 5+ when Data Aggregation layer built. Week 1 is just endpoint discovery.
 ## 🎯 THIS SPRINT'S GOAL
 
 **By Friday of Week 2:**
+
 - API Discovery Engine working
 - 1,000+ endpoints registered
 - User can click "Refresh APIs" and see all available endpoints
 - Zero manual configuration needed
 
 **Go/No-Go Gate Pass Criteria:**
+
 ```
 ✓ 5 services discovered
 ✓ 900+ endpoints registered
@@ -318,4 +333,3 @@ THIS FILE                              ← For quick startup
 **Timeline:** 18 weeks to MVP  
 **Next:** Monday morning Sprint 1 begins  
 **Questions?** All answered in the 4 documents above
-

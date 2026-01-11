@@ -6,7 +6,7 @@
 **Date:** January 11, 2026  
 **Project Name:** JRD PetroWise  
 **Timeline:** 18 weeks to MVP  
-**Budget:** 600+ engineering hours
+**Budget:** 640+ engineering hours
 
 ---
 
@@ -15,14 +15,14 @@
 **JRD PetroWise** is an enterprise integration and automation platform that:
 
 1. **Aggregates** all JRD enterprise applications (Fuel, Auto, Price-O-Tron, Jumbotron, Scanotron)
-2. **Auto-discovers** APIs through system scanning (no manual configuration)
-3. **Exposes 1,000+** endpoints for workflow automation
+2. **Auto-discovers** APIs through system scanning (minimal configuration)
+3. **Exposes 900+** endpoints for workflow automation
 4. **Visualizes** complex integration connections
 5. **Customizes** to user environment (network, files, permissions)
 6. **Executes** complex fuel + auto workflows with sandbox testing
 7. **Runs** on Windows, macOS, and iOS (unified backend)
 
-**Core Innovation:** The API Discovery Engine that automatically scans your network, discovers all available endpoints, and makes them immediately available for flow building. Zero manual API configuration.
+**Core Innovation:** The API Discovery Engine that automatically scans your network, discovers all available endpoints, and makes them immediately available for flow building. Minimal manual API configuration required.
 
 ---
 
@@ -33,7 +33,7 @@
 ```
 System Scanner → Service Detection → OpenAPI Fetching → Endpoint Registration
 ↓
-Result: 1,000+ endpoints from 5 services (Fuel, Auto, Price-O-Tron, Jumbotron, Scanotron)
+Result: 900+ endpoints from 5 services (Fuel, Auto, Price-O-Tron, Jumbotron, Scanotron)
 ```
 
 **How it works:**
@@ -128,7 +128,7 @@ Traditional integration platforms require:
 - ✓ Automatic API fetching (OpenAPI specs)
 - ✓ Automatic endpoint registration
 - ✓ User clicks "Refresh" button → APIs update
-- ✓ Zero manual configuration
+- ✓ Minimal manual configuration (just ensure services are running)
 
 ### How to Use It
 
@@ -139,7 +139,7 @@ User Opens JRD PetroWise
 │  └─ Finds: JRD Fuel, JRD Auto, Price-O-Tron, Jumbotron, Scanotron
 │
 ├─ System fetches all OpenAPI specs
-│  └─ Discovers: 1,000+ endpoints
+│  └─ Discovers: 900+ endpoints
 │
 ├─ Backend registers all endpoints in database
 │  └─ Creates relationships, validates specs
@@ -248,10 +248,10 @@ npm install axios
 
 **Key Sprints:**
 
-- **Sprint 1-2 (Weeks 1-2):** API Discovery running, 1,000+ endpoints registered
-- **Sprint 2-6 (Weeks 3-8):** Data layer aggregating real-time data
-- **Sprint 6-12 (Weeks 9-12):** Orchestration engine stable, 20+ templates
-- **Sprint 12-18 (Weeks 13-18):** Three clients + security audit
+- **Phase 1 (Weeks 1-4):** API Discovery running, 900+ endpoints registered
+- **Phase 2 (Weeks 5-8):** Data layer aggregating real-time data
+- **Phase 3 (Weeks 9-12):** Orchestration engine stable, 20+ templates
+- **Phase 4-5 (Weeks 13-18):** Three clients + security audit
 
 **For:** Project managers, engineering leadership
 
@@ -264,7 +264,7 @@ npm install axios
 - ✅ Unified backend for all clients (Node.js 20+ with Express, TypeORM, Socket.IO)
 - ✅ API Discovery Engine (auto-detect + fetch APIs)
 - ✅ Service detection (5 JRD applications)
-- ✅ OpenAPI parsing (1,000+ endpoints)
+- ✅ OpenAPI parsing (900+ endpoints)
 - ✅ Fallback introspection (if no OpenAPI spec)
 - ✅ Endpoint registration (PostgreSQL database)
 - ✅ REST API routes (scan, list, search)
@@ -366,7 +366,7 @@ npm install axios
 **You'll know API Discovery is working when:**
 
 - ✓ Backend discovers 5 services on first scan
-- ✓ 1,000+ endpoints registered
+- ✓ 900+ endpoints registered
 - ✓ `/api/discovery/scan` returns services + endpoints
 - ✓ User can click "Refresh APIs" button
 - ✓ All endpoints available in flow builder
@@ -403,7 +403,7 @@ npm install axios
 | Metric | Target |
 | -------- | -------- |
 | Services Discovered | 5 |
-| Endpoints Available | 1,000+ |
+| Endpoints Available | 900+ |
 | API Response Time | <500ms p95 |
 | Real-time Latency | <1s |
 | Flow Success Rate | >99% |
@@ -450,14 +450,12 @@ Git commits: 11 (all merged to master)
 
 | Phase | Status | Timeline |
 |-------|--------|----------|
-| **Phase 0:** Design Vision | ✅ Complete | Jan 11 |
-| **Phase 1:** Frontend System | ✅ Complete | Previous sessions |
-| **Phase 2:** Backend + 3 Clients | ✅ Architecture Complete | Jan 11 |
-| **Phase 3:** API Discovery Engine | 🚀 Ready to Code | Weeks 1-4 |
-| **Phase 4:** Data Aggregation | 🚀 Ready to Code | Weeks 5-8 |
-| **Phase 5:** Orchestration | 🚀 Ready to Code | Weeks 9-12 |
-| **Phase 6:** Three Clients | 🚀 Ready to Code | Weeks 13-16 |
-| **Phase 7:** Security + Launch | 🚀 Ready to Code | Weeks 17-18 |
+| **Prior Work:** Design + Architecture | ✅ Complete | Jan 11 |
+| **Phase 1:** API Discovery Engine | 🚀 Ready to Code | Weeks 1-4 |
+| **Phase 2:** Data Aggregation | 🚀 Ready to Code | Weeks 5-8 |
+| **Phase 3:** Orchestration | 🚀 Ready to Code | Weeks 9-12 |
+| **Phase 4:** Client Development | 🚀 Ready to Code | Weeks 13-16 |
+| **Phase 5:** Security + Launch | 🚀 Ready to Code | Weeks 17-18 |
 
 ---
 
@@ -467,9 +465,9 @@ You have a **comprehensive, realistic, production-ready architecture** for JRD P
 
 ✅ **Vision Defined:** Enterprise integration platform aggregating 5+ apps  
 ✅ **Technology Chosen:** Node.js backend, .NET/WinUI (Windows), Swift/SwiftUI (Mac/iOS)  
-✅ **Core Innovation Specified:** Auto-discovery API engine (no manual config)  
-✅ **Implementation Path Clear:** 18 weeks, 600+ hours, 5 phases  
-✅ **Success Criteria Defined:** 1,000+ endpoints, >99% flow success, <500ms latency  
+✅ **Core Innovation Specified:** Auto-discovery API engine (minimal config)  
+✅ **Implementation Path Clear:** 18 weeks, 640+ hours, 5 phases  
+✅ **Success Criteria Defined:** 900+ endpoints, >99% flow success, <500ms latency  
 ✅ **Code Examples Provided:** Copy/paste ready TypeScript  
 ✅ **Risk Mitigation:** Go/No-Go gates at key milestones  
 
