@@ -11,12 +11,20 @@ let package = Package(
             name: "Integrations and automations",
             targets: ["Integrations and automations"]
         ),
+        .executable(
+            name: "IntegrationsStudio",
+            targets: ["IntegrationsStudio"]
+        ),
     ],
     targets: [
         // Targets are the basic building blocks of a package, defining a module or a test suite.
         // Targets can depend on other targets in this package and products from dependencies.
         .target(
             name: "Integrations and automations"
+        ),
+        .executableTarget(
+            name: "IntegrationsStudio",
+            dependencies: ["Integrations and automations"]
         ),
         .testTarget(
             name: "Integrations and automationsTests",
