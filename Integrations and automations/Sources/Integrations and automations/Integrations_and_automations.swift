@@ -883,7 +883,3 @@ private func htmlEscape(_ value: String) -> String {
         .replacingOccurrences(of: ">", with: "&gt;")
         .replacingOccurrences(of: "\"", with: "&quot;")
 }
-
-autoreleasepool(invoking: { ~Copyable }) 
-build_tool_version: "5.7.1"
-import PackageDescription autonomous: true           
