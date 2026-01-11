@@ -1,33 +1,17 @@
 import Foundation
 import Integrations_and_automations
 
-let kit = IntegrationsAndAutomations()
-let catalog = kit.applianceKit()
-let engine = ApplianceEngine()
-let renderer = ApplianceRenderer()
+let studio = AutomationStudio.sample()
+let renderer = StudioRenderer()
 
-let selectedAppliance = catalog.appliances.first ?? AutomationAppliance(
-    id: "empty",
-    name: "Empty",
-    headline: "No appliances available.",
-    outcome: "",
-    timeToValue: "",
-    setup: SetupFlow(steps: []),
-    template: ApplianceTemplate(basePlan: [], defaultMode: .assist, defaultSchedule: "", defaultGuardrails: [])
-)
-
-let answers = engine.defaultAnswers(for: selectedAppliance)
-let recommendation = engine.recommend(appliance: selectedAppliance, answers: answers)
-
-print(renderer.renderCLI(catalog: catalog, recommendation: recommendation))
+print(renderer.renderCLI(studio))
 
 let arguments = Set(CommandLine.arguments.dropFirst())
 let shouldWriteHTML = arguments.contains("--html") || arguments.contains("--open") || arguments.contains("-o")
 let shouldOpen = arguments.contains("--open") || arguments.contains("-o")
 
 if shouldWriteHTML {
-    let configJSON = engine.exportJSON(recommendation)
-    let html = renderer.renderHTML(catalog: catalog, recommendation: recommendation, configJSON: configJSON)
+    let html = renderer.renderHTML(studio)
     let fileName = "Integrations Studio Preview.html"
     let fileURL = URL(fileURLWithPath: FileManager.default.currentDirectoryPath)
         .appendingPathComponent(fileName)

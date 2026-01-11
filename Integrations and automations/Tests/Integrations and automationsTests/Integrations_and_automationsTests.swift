@@ -1,29 +1,23 @@
 import Testing
 @testable import Integrations_and_automations
 
-@Test func catalogBuilds() async throws {
-    let catalog = ApplianceCatalog.sample()
-    #expect(!catalog.appliances.isEmpty)
-    #expect(!catalog.integrations.isEmpty)
+@Test func studioBuilds() async throws {
+    let studio = AutomationStudio.sample()
+    #expect(!studio.flows.isEmpty)
+    #expect(!studio.integrations.isEmpty)
 }
 
-@Test func recommendationBuilds() async throws {
-    let catalog = ApplianceCatalog.sample()
-    let appliance = catalog.appliances[0]
-    let engine = ApplianceEngine()
-    let answers = engine.defaultAnswers(for: appliance)
-    let recommendation = engine.recommend(appliance: appliance, answers: answers)
-    #expect(!recommendation.plan.isEmpty)
-    #expect(!recommendation.guardrails.isEmpty)
+@Test func flowsHaveNodes() async throws {
+    let studio = AutomationStudio.sample()
+    let flow = studio.flows[0]
+    #expect(!flow.nodes.isEmpty)
+    #expect(!flow.connections.isEmpty)
 }
 
 @Test func rendererOutputsHTML() async throws {
-    let catalog = ApplianceCatalog.sample()
-    let appliance = catalog.appliances[0]
-    let engine = ApplianceEngine()
-    let answers = engine.defaultAnswers(for: appliance)
-    let recommendation = engine.recommend(appliance: appliance, answers: answers)
-    let html = ApplianceRenderer().renderHTML(catalog: catalog, recommendation: recommendation, configJSON: engine.exportJSON(recommendation))
+    let studio = AutomationStudio.sample()
+    let html = StudioRenderer().renderHTML(studio)
     #expect(html.contains("<html"))
-    #expect(html.contains(catalog.name))
+    // Name contains & which is escaped to &amp; in HTML
+    #expect(html.contains("Integrations &amp; Automations Studio"))
 }
