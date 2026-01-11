@@ -1,20 +1,11 @@
 import Foundation
-
-/*
- PROJECT INSTRUCTIONS (KEEP THIS AT THE TOP OF THIS FILE)
- - Agent runtime: Claude is the acting agent. Use Claude CLI + Claude Code to execute, generate, and complete tasks.
- - Backend design/build: Copilot is primary, with ChatGPT + Codex as collaborators for backend architecture and implementation.
- - Freedom with boundaries: maximize autonomy, but every action must stay inside the running product API.
- - Appliance-simple: three questions, defaults that work day one, and guardrails that are always visible.
- - VS Code first: keep the workspace organized around Sources/, Tests/, and Package.swift; avoid committing generated artifacts.
-*/
-
-/// Entry point type for integrations and automations.
+d
+/// Entry point type for the integrations and automations library.
 public struct IntegrationsAndAutomations {
     public init() {}
 
-    public func applianceKit() -> ApplianceCatalog {
-        ApplianceCatalog.sample()
+    public func studio() -> AutomationStudio {
+        AutomationStudio.sample()
     }
 }
 
@@ -35,7 +26,9 @@ public struct Integration: Hashable, Identifiable, Sendable {
 public enum IntegrationCategory: String, CaseIterable, Hashable, Sendable {
     case messaging
     case data
+    case ops
     case finance
+    case devtools
     case ai
     case docs
 
@@ -43,1071 +36,521 @@ public enum IntegrationCategory: String, CaseIterable, Hashable, Sendable {
         switch self {
         case .messaging: return "Messaging"
         case .data: return "Data"
+        case .ops: return "Ops"
         case .finance: return "Finance"
+        case .devtools: return "Devtools"
         case .ai: return "AI"
         case .docs: return "Docs"
         }
     }
 }
 
-public struct OperatingModel: Hashable, Sendable {
-    public let agentRuntime: AgentRuntime
-    public let backendBuild: BackendBuild
-    public let apiBoundary: String
-    public let workspaceGuide: WorkspaceGuide
+public enum NodeKind: String, CaseIterable, Hashable, Sendable {
+    case trigger
+    case action
+    case filter
+    case transform
+    case decision
+    case delay
+
+    public var label: String {
+        rawValue.uppercased()
+    }
+}
+
+public struct AutomationNode: Hashable, Identifiable, Sendable {
+    public let id: String
+    public let title: String
+    public let kind: NodeKind
+    public let detail: String
+    public let integrationName: String?
 
     public init(
-        agentRuntime: AgentRuntime,
-        backendBuild: BackendBuild,
-        apiBoundary: String,
-        workspaceGuide: WorkspaceGuide
+        id: String,
+        title: String,
+        kind: NodeKind,
+        detail: String,
+        integrationName: String? = nil
     ) {
-        self.agentRuntime = agentRuntime
-        self.backendBuild = backendBuild
-        self.apiBoundary = apiBoundary
-        self.workspaceGuide = workspaceGuide
+        self.id = id
+        self.title = title
+        self.kind = kind
+        self.detail = detail
+        self.integrationName = integrationName
     }
 }
 
-public struct AgentRuntime: Hashable, Sendable {
-    public let name: String
-    public let tools: [String]
-    public let responsibilities: [String]
+public struct AutomationConnection: Hashable, Sendable {
+    public let from: String
+    public let to: String
+    public let label: String
 
-    public init(name: String, tools: [String], responsibilities: [String]) {
+    public init(from: String, to: String, label: String = "") {
+        self.from = from
+        self.to = to
+        self.label = label
+    }
+}
+
+public struct FlowMetrics: Hashable, Sendable {
+    public let successRate: String
+    public let avgRuntime: String
+    public let volumePerDay: String
+    public let notes: String
+
+    public init(successRate: String, avgRuntime: String, volumePerDay: String, notes: String) {
+        self.successRate = successRate
+        self.avgRuntime = avgRuntime
+        self.volumePerDay = volumePerDay
+        self.notes = notes
+    }
+}
+
+public struct AutomationFlow: Hashable, Identifiable, Sendable {
+    public let id: String
+    public let name: String
+    public let intention: String
+    public let nodes: [AutomationNode]
+    public let connections: [AutomationConnection]
+    public let metrics: FlowMetrics
+
+    public init(
+        id: String,
+        name: String,
+        intention: String,
+        nodes: [AutomationNode],
+        connections: [AutomationConnection],
+        metrics: FlowMetrics
+    ) {
+        self.id = id
         self.name = name
-        self.tools = tools
-        self.responsibilities = responsibilities
+        self.intention = intention
+        self.nodes = nodes
+        self.connections = connections
+        self.metrics = metrics
     }
 }
 
-public struct BackendBuild: Hashable, Sendable {
-    public let primary: String
-    public let collaborators: [String]
-    public let responsibilities: [String]
-
-    public init(primary: String, collaborators: [String], responsibilities: [String]) {
-        self.primary = primary
-        self.collaborators = collaborators
-        self.responsibilities = responsibilities
-    }
-}
-
-public struct WorkspaceGuide: Hashable, Sendable {
-    public let ide: String
-    public let focusAreas: [String]
-    public let rules: [String]
-
-    public init(ide: String, focusAreas: [String], rules: [String]) {
-        self.ide = ide
-        self.focusAreas = focusAreas
-        self.rules = rules
-    }
-}
-
-public struct ApplianceCatalog: Hashable, Sendable {
+public struct StudioTheme: Hashable, Sendable {
     public let name: String
-    public let promise: String
-    public let principles: [String]
-    public let operatingModel: OperatingModel
-    public let integrations: [Integration]
-    public let appliances: [AutomationAppliance]
+    public let accent: String
+    public let accentSoft: String
+    public let background: String
+    public let backgroundAlt: String
+    public let foreground: String
+    public let highlight: String
 
     public init(
         name: String,
-        promise: String,
-        principles: [String],
-        operatingModel: OperatingModel,
-        integrations: [Integration],
-        appliances: [AutomationAppliance]
+        accent: String,
+        accentSoft: String,
+        background: String,
+        backgroundAlt: String,
+        foreground: String,
+        highlight: String
     ) {
         self.name = name
-        self.promise = promise
-        self.principles = principles
-        self.operatingModel = operatingModel
-        self.integrations = integrations
-        self.appliances = appliances
+        self.accent = accent
+        self.accentSoft = accentSoft
+        self.background = background
+        self.backgroundAlt = backgroundAlt
+        self.foreground = foreground
+        self.highlight = highlight
     }
 
-    public static func sample() -> ApplianceCatalog {
-        let operatingModel = OperatingModel(
-            agentRuntime: AgentRuntime(
-                name: "Claude",
-                tools: ["Claude CLI", "Claude Code"],
-                responsibilities: ["Act", "Generate", "Execute tasks end-to-end"]
-            ),
-            backendBuild: BackendBuild(
-                primary: "Copilot",
-                collaborators: ["ChatGPT", "Codex"],
-                responsibilities: ["Design backend", "Implement adapters", "Ship tests"]
-            ),
-            apiBoundary: "All actions must stay inside the running product API. No external side effects.",
-            workspaceGuide: WorkspaceGuide(
-                ide: "VS Code",
-                focusAreas: ["Sources/", "Tests/", "Package.swift"],
-                rules: ["Avoid generated artifacts", "Remove duplicates", "Keep samples minimal"]
-            )
+    public static let presets: [StudioTheme] = [
+        StudioTheme(
+            name: "Copper Tide",
+            accent: "#ff8a5b",
+            accentSoft: "#ffb089",
+            background: "#0c1a1f",
+            backgroundAlt: "#14262e",
+            foreground: "#f3f2ea",
+            highlight: "#ffd6a8"
+        ),
+        StudioTheme(
+            name: "Mint Voltage",
+            accent: "#2cead3",
+            accentSoft: "#97f2e7",
+            background: "#081b20",
+            backgroundAlt: "#0f2c33",
+            foreground: "#e7fbf8",
+            highlight: "#b6fff5"
+        ),
+        StudioTheme(
+            name: "Solar Drift",
+            accent: "#ffcc4d",
+            accentSoft: "#ffe7a3",
+            background: "#1c1410",
+            backgroundAlt: "#2b1b12",
+            foreground: "#fff5e3",
+            highlight: "#ffe9c2"
         )
+    ]
+}
 
+public struct AutomationStudio: Hashable, Sendable {
+    public let name: String
+    public let tagline: String
+    public let theme: StudioTheme
+    public let integrations: [Integration]
+    public let flows: [AutomationFlow]
+    public let workbenches: [StudioWorkbench]
+
+    public init(
+        name: String,
+        tagline: String,
+        theme: StudioTheme,
+        integrations: [Integration],
+        flows: [AutomationFlow],
+        workbenches: [StudioWorkbench]
+    ) {
+        self.name = name
+        self.tagline = tagline
+        self.theme = theme
+        self.integrations = integrations
+        self.flows = flows
+        self.workbenches = workbenches
+    }
+
+    public static func sample() -> AutomationStudio {
         let integrations: [Integration] = [
             Integration(
-                id: "maildrop",
-                name: "Maildrop",
+                id: "pulse",
+                name: "Pulse Inbox",
                 category: .messaging,
-                capabilities: ["Inbound sync", "Smart triage", "Reply drafts"]
+                capabilities: ["Thread capture", "Priority tags", "Human escalation"]
             ),
             Integration(
                 id: "northwind",
                 name: "Northwind CRM",
                 category: .data,
-                capabilities: ["Lead capture", "Lifecycle scoring", "Task routing"]
+                capabilities: ["Lead sync", "Lifecycle scoring", "Account notes"]
+            ),
+            Integration(
+                id: "atlas",
+                name: "Atlas Ops",
+                category: .ops,
+                capabilities: ["Runbook triggers", "On-call rotations", "Incident timeline"]
             ),
             Integration(
                 id: "harbor",
                 name: "Harbor Ledger",
                 category: .finance,
-                capabilities: ["Invoice watch", "Payment drift", "Cash notes"]
+                capabilities: ["Invoice watch", "Payment drift", "Cash forecast"]
+            ),
+            Integration(
+                id: "quartz",
+                name: "Quartz Build",
+                category: .devtools,
+                capabilities: ["Pipeline status", "Deploy gates", "Quality checks"]
             ),
             Integration(
                 id: "lumen",
                 name: "Lumen AI",
                 category: .ai,
-                capabilities: ["Summaries", "Drafts", "Forecasts"]
+                capabilities: ["Summaries", "Forecasts", "Rag notes"]
             ),
             Integration(
                 id: "folio",
                 name: "Folio Docs",
                 category: .docs,
-                capabilities: ["Decision logs", "Briefs", "Context vault"]
+                capabilities: ["Briefs", "Decision logs", "Evergreen pages"]
             )
         ]
 
-        let inboxAppliance = AutomationAppliance(
-            id: "inbox_autopilot",
-            name: "Inbox Autopilot",
-            headline: "Your inbox works while you sleep.",
-            outcome: "Daily digest, smart drafts, and the boring threads handled.",
-            timeToValue: "10 min",
-            setup: SetupFlow(steps: [
-                SetupStep(
-                    id: "delivery",
-                    title: "Where should updates land?",
-                    prompt: "Pick where you actually look every day.",
-                    options: [
-                        SetupOption(
-                            id: "email_only",
-                            label: "Email",
-                            detail: "Simple and quiet. Digest arrives at 8am.",
-                            adjustments: [
-                                .setSchedule("Daily 8:00am")
-                            ],
-                            isRecommended: true
-                        ),
-                        SetupOption(
-                            id: "chat_only",
-                            label: "Chat",
-                            detail: "Short bursts in your team channel.",
-                            adjustments: [
-                                .setSchedule("Weekdays at 9:00am")
-                            ],
-                            isRecommended: false
-                        ),
-                        SetupOption(
-                            id: "both",
-                            label: "Email + Chat",
-                            detail: "Digest in email, heads-up in chat.",
-                            adjustments: [
-                                .setSchedule("Daily 8:00am")
-                            ],
-                            isRecommended: false
-                        )
-                    ]
-                ),
-                SetupStep(
-                    id: "autonomy",
-                    title: "How bold can it be?",
-                    prompt: "Choose how much the appliance can act on its own.",
-                    options: [
-                        SetupOption(
-                            id: "draft_only",
-                            label: "Draft only",
-                            detail: "Everything waits for your approval.",
-                            adjustments: [
-                                .setMode(.assist),
-                                .addGuardrail(Guardrail(
-                                    id: "no_send",
-                                    title: "No auto-send",
-                                    detail: "All outbound messages stay in drafts.",
-                                    severity: .firm
-                                ))
-                            ],
-                            isRecommended: false
-                        ),
-                        SetupOption(
-                            id: "co_pilot",
-                            label: "Co-pilot",
-                            detail: "Auto-send low-risk replies, ask on sensitive ones.",
-                            adjustments: [
-                                .setMode(.copilot),
-                                .addGuardrail(Guardrail(
-                                    id: "sensitive_topics",
-                                    title: "Sensitive topics require approval",
-                                    detail: "Pricing, legal, and exec threads are held.",
-                                    severity: .firm
-                                ))
-                            ],
-                            isRecommended: true
-                        ),
-                        SetupOption(
-                            id: "auto",
-                            label: "Auto",
-                            detail: "Auto-send routine replies with safety checks.",
-                            adjustments: [
-                                .setMode(.auto),
-                                .addGuardrail(Guardrail(
-                                    id: "escalate_uncertain",
-                                    title: "Escalate low confidence",
-                                    detail: "If confidence is below 0.76, request approval.",
-                                    severity: .soft
-                                ))
-                            ],
-                            isRecommended: false
-                        )
-                    ]
-                ),
-                SetupStep(
-                    id: "never_touch",
-                    title: "What should it never touch?",
-                    prompt: "Pick a safe boundary and it will stay inside it.",
-                    options: [
-                        SetupOption(
-                            id: "finance",
-                            label: "Finance threads",
-                            detail: "No invoices or payment promises.",
-                            adjustments: [
-                                .addGuardrail(Guardrail(
-                                    id: "finance_hold",
-                                    title: "Finance hold",
-                                    detail: "Finance conversations always need review.",
-                                    severity: .strict
-                                ))
-                            ],
-                            isRecommended: true
-                        ),
-                        SetupOption(
-                            id: "legal",
-                            label: "Legal or compliance",
-                            detail: "Nothing sent without explicit sign-off.",
-                            adjustments: [
-                                .addGuardrail(Guardrail(
-                                    id: "legal_hold",
-                                    title: "Legal hold",
-                                    detail: "Legal topics route to a human owner.",
-                                    severity: .strict
-                                ))
-                            ],
-                            isRecommended: false
-                        ),
-                        SetupOption(
-                            id: "execs",
-                            label: "Executive threads",
-                            detail: "Anything with the exec team stays manual.",
-                            adjustments: [
-                                .addGuardrail(Guardrail(
-                                    id: "exec_hold",
-                                    title: "Executive hold",
-                                    detail: "Exec threads never auto-send.",
-                                    severity: .firm
-                                ))
-                            ],
-                            isRecommended: false
-                        )
-                    ]
-                )
-            ]),
-            template: ApplianceTemplate(
-                basePlan: [
-                    PlanStep(
-                        id: "capture",
-                        title: "Capture incoming threads",
-                        summary: "Sync new inbound messages and label them.",
-                        integrationName: "Maildrop",
-                        requiresApproval: false
-                    ),
-                    PlanStep(
-                        id: "classify",
-                        title: "Classify intent",
-                        summary: "Detect intent, urgency, and sentiment.",
-                        integrationName: "Lumen AI",
-                        requiresApproval: false
-                    ),
-                    PlanStep(
-                        id: "draft",
-                        title: "Draft replies",
-                        summary: "Generate concise, human-sounding replies.",
-                        integrationName: "Lumen AI",
-                        requiresApproval: false
-                    ),
-                    PlanStep(
-                        id: "queue",
-                        title: "Queue for review",
-                        summary: "Keep drafts ready with clear next actions.",
-                        integrationName: "Maildrop",
-                        requiresApproval: true
-                    )
-                ],
-                defaultMode: .copilot,
-                defaultSchedule: "Daily 8:00am",
-                defaultGuardrails: [
-                    Guardrail(
-                        id: "attachment_block",
-                        title: "No attachments",
-                        detail: "Never send files unless manually approved.",
-                        severity: .firm
-                    )
-                ]
+        let leadFlowNodes: [AutomationNode] = [
+            AutomationNode(
+                id: "lead_trigger",
+                title: "New lead scored",
+                kind: .trigger,
+                detail: "Score over 72 triggers handoff",
+                integrationName: "Northwind CRM"
+            ),
+            AutomationNode(
+                id: "lead_filter",
+                title: "Filter by region",
+                kind: .filter,
+                detail: "Focus on NA + EMEA",
+                integrationName: "Northwind CRM"
+            ),
+            AutomationNode(
+                id: "lead_action",
+                title: "Draft outreach",
+                kind: .action,
+                detail: "Create tailored intro email",
+                integrationName: "Lumen AI"
+            ),
+            AutomationNode(
+                id: "lead_sync",
+                title: "Update pipeline",
+                kind: .action,
+                detail: "Push to sales pipeline",
+                integrationName: "Northwind CRM"
             )
-        )
+        ]
 
-        let leadAppliance = AutomationAppliance(
-            id: "lead_nurture",
-            name: "Lead Nurture",
-            headline: "Leads never go cold.",
-            outcome: "Every lead gets a personal touch in under 2 hours.",
-            timeToValue: "12 min",
-            setup: SetupFlow(steps: [
-                SetupStep(
-                    id: "lead_source",
-                    title: "Where do leads arrive?",
-                    prompt: "Pick the source with the most volume.",
-                    options: [
-                        SetupOption(
-                            id: "crm",
-                            label: "CRM",
-                            detail: "Leads already land in the CRM.",
-                            adjustments: [],
-                            isRecommended: true
-                        ),
-                        SetupOption(
-                            id: "web",
-                            label: "Website form",
-                            detail: "New submissions hit a form inbox.",
-                            adjustments: [
-                                .addStep(PlanStep(
-                                    id: "form_capture",
-                                    title: "Capture form submissions",
-                                    summary: "Normalize inbound forms and attach metadata.",
-                                    integrationName: "Maildrop",
-                                    requiresApproval: false
-                                ))
-                            ],
-                            isRecommended: false
-                        )
-                    ]
-                ),
-                SetupStep(
-                    id: "followup_speed",
-                    title: "How fast should follow-ups go out?",
-                    prompt: "Faster replies win more deals.",
-                    options: [
-                        SetupOption(
-                            id: "one_hour",
-                            label: "Within 1 hour",
-                            detail: "Aggressive for high-volume inbound.",
-                            adjustments: [
-                                .setSchedule("Every hour")
-                            ],
-                            isRecommended: false
-                        ),
-                        SetupOption(
-                            id: "two_hours",
-                            label: "Within 2 hours",
-                            detail: "Balanced between speed and control.",
-                            adjustments: [
-                                .setSchedule("Every 2 hours")
-                            ],
-                            isRecommended: true
-                        ),
-                        SetupOption(
-                            id: "same_day",
-                            label: "Same day",
-                            detail: "Gentle touch, lower pressure.",
-                            adjustments: [
-                                .setSchedule("Daily 4:00pm")
-                            ],
-                            isRecommended: false
-                        )
-                    ]
-                ),
-                SetupStep(
-                    id: "handoff",
-                    title: "Who approves the first message?",
-                    prompt: "Keep the human in the loop when needed.",
-                    options: [
-                        SetupOption(
-                            id: "auto",
-                            label: "Auto for low-risk",
-                            detail: "Auto-send templates for SMB leads.",
-                            adjustments: [
-                                .setMode(.auto),
-                                .addGuardrail(Guardrail(
-                                    id: "enterprise_hold",
-                                    title: "Enterprise hold",
-                                    detail: "Enterprise accounts always require review.",
-                                    severity: .firm
-                                ))
-                            ],
-                            isRecommended: true
-                        ),
-                        SetupOption(
-                            id: "approval",
-                            label: "Approval required",
-                            detail: "Every message waits for review.",
-                            adjustments: [
-                                .setMode(.assist)
-                            ],
-                            isRecommended: false
-                        )
-                    ]
-                )
-            ]),
-            template: ApplianceTemplate(
-                basePlan: [
-                    PlanStep(
-                        id: "lead_capture",
-                        title: "Capture new lead",
-                        summary: "Bring new leads into the routing queue.",
-                        integrationName: "Northwind CRM",
-                        requiresApproval: false
-                    ),
-                    PlanStep(
-                        id: "enrich",
-                        title: "Enrich profile",
-                        summary: "Fill gaps with firmographic context.",
-                        integrationName: "Lumen AI",
-                        requiresApproval: false
-                    ),
-                    PlanStep(
-                        id: "draft_intro",
-                        title: "Draft intro message",
-                        summary: "Personalize with context and next step.",
-                        integrationName: "Lumen AI",
-                        requiresApproval: false
-                    ),
-                    PlanStep(
-                        id: "route",
-                        title: "Route to owner",
-                        summary: "Assign to the right rep and log details.",
-                        integrationName: "Northwind CRM",
-                        requiresApproval: true
-                    )
-                ],
-                defaultMode: .copilot,
-                defaultSchedule: "Every 2 hours",
-                defaultGuardrails: [
-                    Guardrail(
-                        id: "no_pricing",
-                        title: "No pricing quotes",
-                        detail: "Price discussions always require approval.",
-                        severity: .firm
-                    )
-                ]
+        let incidentFlowNodes: [AutomationNode] = [
+            AutomationNode(
+                id: "incident_trigger",
+                title: "Incident detected",
+                kind: .trigger,
+                detail: "Latency spike above 2s",
+                integrationName: "Atlas Ops"
+            ),
+            AutomationNode(
+                id: "incident_delay",
+                title: "Warmup window",
+                kind: .delay,
+                detail: "Hold for 3 minutes",
+                integrationName: "Atlas Ops"
+            ),
+            AutomationNode(
+                id: "incident_decision",
+                title: "Noise gate",
+                kind: .decision,
+                detail: "Escalate if still unstable",
+                integrationName: "Quartz Build"
+            ),
+            AutomationNode(
+                id: "incident_action",
+                title: "Launch runbook",
+                kind: .action,
+                detail: "Open incident dashboard",
+                integrationName: "Atlas Ops"
+            ),
+            AutomationNode(
+                id: "incident_notify",
+                title: "Notify leads",
+                kind: .action,
+                detail: "Send bridge brief",
+                integrationName: "Pulse Inbox"
             )
-        )
+        ]
 
-        let invoiceAppliance = AutomationAppliance(
-            id: "invoice_nudge",
-            name: "Invoice Nudge",
-            headline: "Gentle reminders that get paid.",
-            outcome: "Overdue invoices get a clean follow-up without awkwardness.",
-            timeToValue: "8 min",
-            setup: SetupFlow(steps: [
-                SetupStep(
-                    id: "tone",
-                    title: "Pick the tone",
-                    prompt: "Set the vibe for reminders.",
-                    options: [
-                        SetupOption(
-                            id: "gentle",
-                            label: "Gentle",
-                            detail: "Friendly and short, assumes a mistake.",
-                            adjustments: [
-                                .addStep(PlanStep(
-                                    id: "tone_gentle",
-                                    title: "Use friendly language",
-                                    summary: "Keep reminders soft and helpful.",
-                                    integrationName: "Lumen AI",
-                                    requiresApproval: false
-                                ))
-                            ],
-                            isRecommended: true
-                        ),
-                        SetupOption(
-                            id: "neutral",
-                            label: "Neutral",
-                            detail: "Clear, professional, direct.",
-                            adjustments: [],
-                            isRecommended: false
-                        ),
-                        SetupOption(
-                            id: "firm",
-                            label: "Firm",
-                            detail: "Direct with clear next steps.",
-                            adjustments: [
-                                .addGuardrail(Guardrail(
-                                    id: "approval_firm",
-                                    title: "Firm tone review",
-                                    detail: "Firm reminders require approval.",
-                                    severity: .soft
-                                ))
-                            ],
-                            isRecommended: false
-                        )
-                    ]
-                ),
-                SetupStep(
-                    id: "escalate",
-                    title: "When should it escalate?",
-                    prompt: "Choose the escalation window.",
-                    options: [
-                        SetupOption(
-                            id: "seven_days",
-                            label: "After 7 days",
-                            detail: "Act quickly on drift.",
-                            adjustments: [
-                                .setSchedule("Daily 9:00am")
-                            ],
-                            isRecommended: false
-                        ),
-                        SetupOption(
-                            id: "fourteen_days",
-                            label: "After 14 days",
-                            detail: "Balanced, reduces noise.",
-                            adjustments: [
-                                .setSchedule("Weekdays 9:00am")
-                            ],
-                            isRecommended: true
-                        ),
-                        SetupOption(
-                            id: "thirty_days",
-                            label: "After 30 days",
-                            detail: "Gentle, very low touch.",
-                            adjustments: [
-                                .setSchedule("Weekly Monday 9:00am")
-                            ],
-                            isRecommended: false
-                        )
-                    ]
-                ),
-                SetupStep(
-                    id: "owner",
-                    title: "Who owns the message?",
-                    prompt: "Keep it aligned with your brand voice.",
-                    options: [
-                        SetupOption(
-                            id: "finance",
-                            label: "Finance",
-                            detail: "Send from the billing team address.",
-                            adjustments: [],
-                            isRecommended: true
-                        ),
-                        SetupOption(
-                            id: "account",
-                            label: "Account owner",
-                            detail: "Sent from the rep managing the client.",
-                            adjustments: [
-                                .addGuardrail(Guardrail(
-                                    id: "account_owner_review",
-                                    title: "Owner approval",
-                                    detail: "Account owners must approve the first send.",
-                                    severity: .soft
-                                ))
-                            ],
-                            isRecommended: false
-                        )
-                    ]
-                )
-            ]),
-            template: ApplianceTemplate(
-                basePlan: [
-                    PlanStep(
-                        id: "invoice_watch",
-                        title: "Watch invoice drift",
-                        summary: "Detect invoices past due.",
-                        integrationName: "Harbor Ledger",
-                        requiresApproval: false
-                    ),
-                    PlanStep(
-                        id: "summarize",
-                        title: "Summarize context",
-                        summary: "Highlight reason and payment history.",
-                        integrationName: "Lumen AI",
-                        requiresApproval: false
-                    ),
-                    PlanStep(
-                        id: "draft_note",
-                        title: "Draft reminder",
-                        summary: "Create a friendly follow-up.",
-                        integrationName: "Lumen AI",
-                        requiresApproval: false
-                    ),
-                    PlanStep(
-                        id: "log",
-                        title: "Log follow-up",
-                        summary: "Record outreach in a decision log.",
-                        integrationName: "Folio Docs",
-                        requiresApproval: false
-                    )
-                ],
-                defaultMode: .copilot,
-                defaultSchedule: "Weekdays 9:00am",
-                defaultGuardrails: [
-                    Guardrail(
-                        id: "no_promises",
-                        title: "No payment promises",
-                        detail: "Never commit to payment terms without a human.",
-                        severity: .firm
-                    )
-                ]
+        let financeFlowNodes: [AutomationNode] = [
+            AutomationNode(
+                id: "finance_trigger",
+                title: "Invoice drift",
+                kind: .trigger,
+                detail: "Late by 7 days",
+                integrationName: "Harbor Ledger"
+            ),
+            AutomationNode(
+                id: "finance_transform",
+                title: "Summarize context",
+                kind: .transform,
+                detail: "Highlight overdue reason",
+                integrationName: "Lumen AI"
+            ),
+            AutomationNode(
+                id: "finance_action",
+                title: "Prep followup",
+                kind: .action,
+                detail: "Draft finance note",
+                integrationName: "Pulse Inbox"
+            ),
+            AutomationNode(
+                id: "finance_log",
+                title: "Log brief",
+                kind: .action,
+                detail: "Append to decision log",
+                integrationName: "Folio Docs"
             )
-        )
+        ]
 
-        return ApplianceCatalog(
-            name: "Appliance Automation OS",
-            promise: "Simple, sellable automations for teams that never want to touch a prompt.",
-            principles: [
-                "Ask only three questions.",
-                "Auto-configure from defaults that work on day one.",
-                "Stay inside the product API, never outside it.",
-                "Guardrails are always visible, editable, and human-first."
-            ],
-            operatingModel: operatingModel,
+        let flows: [AutomationFlow] = [
+            AutomationFlow(
+                id: "lead_orbit",
+                name: "Lead Orbit",
+                intention: "Convert fast-moving leads into tailored outreach without losing context.",
+                nodes: leadFlowNodes,
+                connections: [
+                    AutomationConnection(from: "lead_trigger", to: "lead_filter"),
+                    AutomationConnection(from: "lead_filter", to: "lead_action"),
+                    AutomationConnection(from: "lead_action", to: "lead_sync")
+                ],
+                metrics: FlowMetrics(
+                    successRate: "97%",
+                    avgRuntime: "2m 18s",
+                    volumePerDay: "140",
+                    notes: "Auto-escalate on VIP signals"
+                )
+            ),
+            AutomationFlow(
+                id: "incident_radar",
+                name: "Incident Radar",
+                intention: "Spot high-signal incidents, reduce noise, and launch the right runbook.",
+                nodes: incidentFlowNodes,
+                connections: [
+                    AutomationConnection(from: "incident_trigger", to: "incident_delay"),
+                    AutomationConnection(from: "incident_delay", to: "incident_decision", label: "Stable?"),
+                    AutomationConnection(from: "incident_decision", to: "incident_action", label: "Escalate"),
+                    AutomationConnection(from: "incident_action", to: "incident_notify")
+                ],
+                metrics: FlowMetrics(
+                    successRate: "92%",
+                    avgRuntime: "4m 02s",
+                    volumePerDay: "36",
+                    notes: "Uses quiet hours gating"
+                )
+            ),
+            AutomationFlow(
+                id: "cash_drift",
+                name: "Cash Drift",
+                intention: "Surface payment drift and keep finance narratives tight.",
+                nodes: financeFlowNodes,
+                connections: [
+                    AutomationConnection(from: "finance_trigger", to: "finance_transform"),
+                    AutomationConnection(from: "finance_transform", to: "finance_action"),
+                    AutomationConnection(from: "finance_action", to: "finance_log")
+                ],
+                metrics: FlowMetrics(
+                    successRate: "95%",
+                    avgRuntime: "1m 11s",
+                    volumePerDay: "82",
+                    notes: "Escalate after 14 days"
+                )
+            )
+        ]
+
+        let workbenches: [StudioWorkbench] = [
+            StudioWorkbench(
+                name: "Signal Deck",
+                purpose: "Curate signals worth automation and rank them by impact.",
+                focus: ["Lead quality", "Latency spikes", "Payment drift"]
+            ),
+            StudioWorkbench(
+                name: "Human Loop",
+                purpose: "Decide where humans must approve or refine automation output.",
+                focus: ["Executive outreach", "Incident messaging", "Customer success followups"]
+            ),
+            StudioWorkbench(
+                name: "Durability Lab",
+                purpose: "Harden automations with fallback paths and observability.",
+                focus: ["Retries", "Shadow modes", "Health probes"]
+            )
+        ]
+
+        let themeSeed = "Integrations & Automations Studio"
+        let themeIndex = stableIndex(seed: themeSeed, modulus: StudioTheme.presets.count)
+        let theme = StudioTheme.presets[themeIndex]
+
+        return AutomationStudio(
+            name: "Integrations & Automations Studio",
+            tagline: "A playful control room for stitching apps into cinematic automations.",
+            theme: theme,
             integrations: integrations,
-            appliances: [inboxAppliance, leadAppliance, invoiceAppliance]
+            flows: flows,
+            workbenches: workbenches
         )
     }
 }
 
-public struct AutomationAppliance: Hashable, Identifiable, Sendable {
-    public let id: String
+public struct StudioWorkbench: Hashable, Sendable {
     public let name: String
-    public let headline: String
-    public let outcome: String
-    public let timeToValue: String
-    public let setup: SetupFlow
-    public let template: ApplianceTemplate
+    public let purpose: String
+    public let focus: [String]
 
-    public init(
-        id: String,
-        name: String,
-        headline: String,
-        outcome: String,
-        timeToValue: String,
-        setup: SetupFlow,
-        template: ApplianceTemplate
-    ) {
-        self.id = id
+    public init(name: String, purpose: String, focus: [String]) {
         self.name = name
-        self.headline = headline
-        self.outcome = outcome
-        self.timeToValue = timeToValue
-        self.setup = setup
-        self.template = template
+        self.purpose = purpose
+        self.focus = focus
     }
 }
 
-public struct SetupFlow: Hashable, Sendable {
-    public let steps: [SetupStep]
-
-    public init(steps: [SetupStep]) {
-        self.steps = steps
-    }
-}
-
-public struct SetupStep: Hashable, Identifiable, Sendable {
-    public let id: String
-    public let title: String
-    public let prompt: String
-    public let options: [SetupOption]
-
-    public init(id: String, title: String, prompt: String, options: [SetupOption]) {
-        self.id = id
-        self.title = title
-        self.prompt = prompt
-        self.options = options
-    }
-}
-
-public struct SetupOption: Hashable, Identifiable, Sendable {
-    public let id: String
-    public let label: String
-    public let detail: String
-    public let adjustments: [PlanAdjustment]
-    public let isRecommended: Bool
-
-    public init(
-        id: String,
-        label: String,
-        detail: String,
-        adjustments: [PlanAdjustment],
-        isRecommended: Bool
-    ) {
-        self.id = id
-        self.label = label
-        self.detail = detail
-        self.adjustments = adjustments
-        self.isRecommended = isRecommended
-    }
-}
-
-public struct ApplianceTemplate: Hashable, Sendable {
-    public let basePlan: [PlanStep]
-    public let defaultMode: AutonomyMode
-    public let defaultSchedule: String
-    public let defaultGuardrails: [Guardrail]
-
-    public init(
-        basePlan: [PlanStep],
-        defaultMode: AutonomyMode,
-        defaultSchedule: String,
-        defaultGuardrails: [Guardrail]
-    ) {
-        self.basePlan = basePlan
-        self.defaultMode = defaultMode
-        self.defaultSchedule = defaultSchedule
-        self.defaultGuardrails = defaultGuardrails
-    }
-}
-
-public struct PlanStep: Hashable, Identifiable, Sendable {
-    public let id: String
-    public let title: String
-    public let summary: String
-    public let integrationName: String
-    public let requiresApproval: Bool
-
-    public init(
-        id: String,
-        title: String,
-        summary: String,
-        integrationName: String,
-        requiresApproval: Bool
-    ) {
-        self.id = id
-        self.title = title
-        self.summary = summary
-        self.integrationName = integrationName
-        self.requiresApproval = requiresApproval
-    }
-}
-
-public enum AutonomyMode: String, CaseIterable, Hashable, Sendable {
-    case assist
-    case copilot
-    case auto
-
-    public var label: String {
-        switch self {
-        case .assist: return "Assist"
-        case .copilot: return "Co-pilot"
-        case .auto: return "Auto"
-        }
-    }
-
-    public var summary: String {
-        switch self {
-        case .assist: return "Drafts only, human sends."
-        case .copilot: return "Auto-send routine items, ask on risk."
-        case .auto: return "Auto-send with guardrails and escalation."
-        }
-    }
-}
-
-public struct Guardrail: Hashable, Identifiable, Sendable {
-    public let id: String
-    public let title: String
-    public let detail: String
-    public let severity: GuardrailSeverity
-
-    public init(id: String, title: String, detail: String, severity: GuardrailSeverity) {
-        self.id = id
-        self.title = title
-        self.detail = detail
-        self.severity = severity
-    }
-}
-
-public enum GuardrailSeverity: String, CaseIterable, Hashable, Sendable {
-    case soft
-    case firm
-    case strict
-
-    public var label: String {
-        switch self {
-        case .soft: return "Soft"
-        case .firm: return "Firm"
-        case .strict: return "Strict"
-        }
-    }
-}
-
-public enum PlanAdjustment: Hashable, Sendable {
-    case addStep(PlanStep)
-    case addGuardrail(Guardrail)
-    case setMode(AutonomyMode)
-    case setSchedule(String)
-}
-
-public struct ApplianceRecommendation: Hashable, Sendable {
-    public let appliance: AutomationAppliance
-    public let plan: [PlanStep]
-    public let mode: AutonomyMode
-    public let schedule: String
-    public let guardrails: [Guardrail]
-    public let estimatedSetupMinutes: Int
-    public let config: AutomationConfig
-
-    public init(
-        appliance: AutomationAppliance,
-        plan: [PlanStep],
-        mode: AutonomyMode,
-        schedule: String,
-        guardrails: [Guardrail],
-        estimatedSetupMinutes: Int,
-        config: AutomationConfig
-    ) {
-        self.appliance = appliance
-        self.plan = plan
-        self.mode = mode
-        self.schedule = schedule
-        self.guardrails = guardrails
-        self.estimatedSetupMinutes = estimatedSetupMinutes
-        self.config = config
-    }
-}
-
-public struct AutomationConfig: Codable, Hashable, Sendable {
-    public let applianceId: String
-    public let applianceName: String
-    public let mode: String
-    public let schedule: String
-    public let steps: [AutomationConfigStep]
-    public let guardrails: [String]
-
-    public init(
-        applianceId: String,
-        applianceName: String,
-        mode: String,
-        schedule: String,
-        steps: [AutomationConfigStep],
-        guardrails: [String]
-    ) {
-        self.applianceId = applianceId
-        self.applianceName = applianceName
-        self.mode = mode
-        self.schedule = schedule
-        self.steps = steps
-        self.guardrails = guardrails
-    }
-}
-
-public struct AutomationConfigStep: Codable, Hashable, Sendable {
-    public let id: String
-    public let title: String
-    public let integration: String
-    public let requiresApproval: Bool
-
-    public init(id: String, title: String, integration: String, requiresApproval: Bool) {
-        self.id = id
-        self.title = title
-        self.integration = integration
-        self.requiresApproval = requiresApproval
-    }
-}
-
-public struct ApplianceEngine {
+public struct StudioRenderer {
     public init() {}
 
-    public func defaultAnswers(for appliance: AutomationAppliance) -> [String: String] {
-        var answers: [String: String] = [:]
-        for step in appliance.setup.steps {
-            if let recommended = step.options.first(where: { $0.isRecommended }) {
-                answers[step.id] = recommended.id
-            } else if let first = step.options.first {
-                answers[step.id] = first.id
-            }
-        }
-        return answers
-    }
-
-    public func recommend(
-        appliance: AutomationAppliance,
-        answers: [String: String]
-    ) -> ApplianceRecommendation {
-        var plan = appliance.template.basePlan
-        var mode = appliance.template.defaultMode
-        var schedule = appliance.template.defaultSchedule
-        var guardrails = appliance.template.defaultGuardrails
-
-        for step in appliance.setup.steps {
-            guard let selectedId = answers[step.id],
-                  let option = step.options.first(where: { $0.id == selectedId }) else {
-                continue
-            }
-
-            for adjustment in option.adjustments {
-                switch adjustment {
-                case .addStep(let newStep):
-                    plan.append(newStep)
-                case .addGuardrail(let newGuardrail):
-                    guardrails.append(newGuardrail)
-                case .setMode(let newMode):
-                    mode = newMode
-                case .setSchedule(let newSchedule):
-                    schedule = newSchedule
-                }
-            }
-        }
-
-        let estimatedSetupMinutes = max(8, 4 + plan.count * 2 + appliance.setup.steps.count)
-        let config = AutomationConfig(
-            applianceId: appliance.id,
-            applianceName: appliance.name,
-            mode: mode.label,
-            schedule: schedule,
-            steps: plan.map {
-                AutomationConfigStep(
-                    id: $0.id,
-                    title: $0.title,
-                    integration: $0.integrationName,
-                    requiresApproval: $0.requiresApproval
-                )
-            },
-            guardrails: guardrails.map { "\($0.title): \($0.detail)" }
-        )
-
-        return ApplianceRecommendation(
-            appliance: appliance,
-            plan: plan,
-            mode: mode,
-            schedule: schedule,
-            guardrails: guardrails,
-            estimatedSetupMinutes: estimatedSetupMinutes,
-            config: config
-        )
-    }
-
-    public func exportJSON(_ recommendation: ApplianceRecommendation) -> String {
-        let encoder = JSONEncoder()
-        encoder.outputFormatting = [.prettyPrinted, .sortedKeys]
-        guard let data = try? encoder.encode(recommendation.config),
-              let json = String(data: data, encoding: .utf8) else {
-            return "{}"
-        }
-        return json
-    }
-}
-
-public struct ApplianceRenderer {
-    public init() {}
-
-    public func renderCLI(catalog: ApplianceCatalog, recommendation: ApplianceRecommendation) -> String {
+    public func renderCLI(_ studio: AutomationStudio) -> String {
         var lines: [String] = []
-        lines.append(catalog.name)
-        lines.append(String(repeating: "=", count: catalog.name.count))
-        lines.append(catalog.promise)
+        lines.append(studio.name)
+        lines.append(String(repeating: "=", count: studio.name.count))
+        lines.append(studio.tagline)
+        lines.append("Theme: \(studio.theme.name)")
         lines.append("")
-        lines.append("Why it works")
+        lines.append("Integrations")
         lines.append(String(repeating: "-", count: 12))
-        catalog.principles.forEach { lines.append("* \($0)") }
+        for integration in studio.integrations {
+            let caps = integration.capabilities.joined(separator: ", ")
+            lines.append("* \(integration.name) [\(integration.category.label)]: \(caps)")
+        }
         lines.append("")
-        lines.append("Appliances")
+        lines.append("Automation Flows")
+        lines.append(String(repeating: "-", count: 16))
+        for flow in studio.flows {
+            lines.append("* \(flow.name) -- \(flow.intention)")
+            lines.append("  Metrics: \(flow.metrics.successRate) success | \(flow.metrics.avgRuntime) avg | \(flow.metrics.volumePerDay) / day")
+            lines.append("  Note: \(flow.metrics.notes)")
+            lines.append("  \(renderNodeLine(flow.nodes))")
+            lines.append("")
+        }
+        lines.append("Workbenches")
         lines.append(String(repeating: "-", count: 10))
-        for appliance in catalog.appliances {
-            lines.append("* \(appliance.name): \(appliance.headline) (\(appliance.timeToValue))")
-        }
-        lines.append("")
-        lines.append("Recommended Setup: \(recommendation.appliance.name)")
-        lines.append(String(repeating: "-", count: 30))
-        for step in recommendation.appliance.setup.steps {
-            let selected = recommendationSelection(for: step)
-            lines.append("* \(step.title) -> \(selected.label)")
-        }
-        lines.append("")
-        lines.append("Automation Plan")
-        lines.append(String(repeating: "-", count: 15))
-        for planStep in recommendation.plan {
-            let approval = planStep.requiresApproval ? " (approval)" : ""
-            lines.append("* \(planStep.title) [\(planStep.integrationName)]\(approval)")
-        }
-        lines.append("")
-        lines.append("Autonomy: \(recommendation.mode.label) - \(recommendation.mode.summary)")
-        lines.append("Schedule: \(recommendation.schedule)")
-        lines.append("Setup time: ~\(recommendation.estimatedSetupMinutes) min")
-        lines.append("")
-        lines.append("Guardrails")
-        lines.append(String(repeating: "-", count: 10))
-        for guardrail in recommendation.guardrails {
-            lines.append("* \(guardrail.title) (\(guardrail.severity.label))")
+        for bench in studio.workbenches {
+            let focus = bench.focus.joined(separator: ", ")
+            lines.append("* \(bench.name): \(bench.purpose) [\(focus)]")
         }
         return lines.joined(separator: "\n")
     }
 
-    public func renderHTML(
-        catalog: ApplianceCatalog,
-        recommendation: ApplianceRecommendation,
-        configJSON: String
-    ) -> String {
-        let applianceCards = catalog.appliances.enumerated().map { index, appliance in
-            let outcomes = appliance.outcome.split(separator: ",").map {
-                "<li>\(htmlEscape(String($0)).trimmingCharacters(in: .whitespaces))</li>"
-            }.joined()
+    public func renderHTML(_ studio: AutomationStudio) -> String {
+        let integrationCards = studio.integrations.enumerated().map { index, integration in
+            let caps = integration.capabilities.map { "<li>\(htmlEscape($0))</li>" }.joined()
             return """
-            <article class="appliance" style="animation-delay: \(Double(index) * 0.08)s;">
-                <div>
-                    <p class="tag">\(htmlEscape(appliance.timeToValue)) setup</p>
-                    <h3>\(htmlEscape(appliance.name))</h3>
-                    <p class="headline">\(htmlEscape(appliance.headline))</p>
-                    <p class="outcome">\(htmlEscape(appliance.outcome))</p>
+            <article class="card" style="animation-delay: \(Double(index) * 0.06)s;">
+                <div class="card-header">
+                    <p class="eyebrow">\(htmlEscape(integration.category.label))</p>
+                    <h3>\(htmlEscape(integration.name))</h3>
                 </div>
-                <ul>\(outcomes)</ul>
-                <button type="button" class="ghost">Start with defaults</button>
+                <ul class="card-list">\(caps)</ul>
             </article>
             """
         }.joined(separator: "\n")
 
-        let setupSteps = recommendation.appliance.setup.steps.enumerated().map { index, step in
-            let selected = recommendationSelection(for: step)
-            return """
-            <div class="setup-step" style="animation-delay: \(Double(index) * 0.06)s;">
-                <span class="step-index">0\(index + 1)</span>
-                <div>
-                    <h4>\(htmlEscape(step.title))</h4>
-                    <p>\(htmlEscape(step.prompt))</p>
-                    <p class="choice">Default: \(htmlEscape(selected.label))</p>
+        let flowCards = studio.flows.enumerated().map { index, flow in
+            let nodes = flow.nodes.map { node in
+                let integrationLabel = node.integrationName.map { "<span class=\"node-meta\">\(htmlEscape($0))</span>" } ?? ""
+                return """
+                <div class="node \(node.kind.rawValue)">
+                    <div class="node-title">\(htmlEscape(node.title))</div>
+                    <div class="node-kind">\(htmlEscape(node.kind.label))</div>
+                    <div class="node-detail">\(htmlEscape(node.detail))</div>
+                    \(integrationLabel)
                 </div>
-            </div>
-            """
-        }.joined(separator: "\n")
+                """
+            }.joined(separator: "<div class=\"connector\">-&gt;</div>")
 
-        let planSteps = recommendation.plan.enumerated().map { index, step in
-            let approval = step.requiresApproval ? "Requires approval" : "Auto"
             return """
-            <div class="plan-step" style="animation-delay: \(Double(index) * 0.05)s;">
-                <h4>\(htmlEscape(step.title))</h4>
-                <p>\(htmlEscape(step.summary))</p>
-                <span>\(htmlEscape(step.integrationName)) • \(approval)</span>
-            </div>
+            <article class="flow" style="animation-delay: \(Double(index) * 0.08)s;">
+                <header>
+                    <div>
+                        <p class="eyebrow">Automation Flow</p>
+                        <h3>\(htmlEscape(flow.name))</h3>
+                        <p class="flow-intent">\(htmlEscape(flow.intention))</p>
+                    </div>
+                    <div class="metrics">
+                        <span>\(htmlEscape(flow.metrics.successRate)) success</span>
+                        <span>\(htmlEscape(flow.metrics.avgRuntime)) avg</span>
+                        <span>\(htmlEscape(flow.metrics.volumePerDay)) / day</span>
+                    </div>
+                </header>
+                <div class="node-row">\(nodes)</div>
+                <p class="flow-note">\(htmlEscape(flow.metrics.notes))</p>
+            </article>
             """
         }.joined(separator: "\n")
 
-        let guardrails = recommendation.guardrails.map {
-            "<li><strong>\(htmlEscape($0.title))</strong> \(htmlEscape($0.detail))</li>"
+        let workbenchCards = studio.workbenches.enumerated().map { index, bench in
+            let focus = bench.focus.map { "<li>\(htmlEscape($0))</li>" }.joined()
+            return """
+            <article class="bench" style="animation-delay: \(Double(index) * 0.05)s;">
+                <h3>\(htmlEscape(bench.name))</h3>
+                <p>\(htmlEscape(bench.purpose))</p>
+                <ul>\(focus)</ul>
+            </article>
+            """
         }.joined(separator: "\n")
-
-        let principles = catalog.principles.map { "<li>\(htmlEscape($0))</li>" }.joined()
-
-        let configSnippet = htmlEscape(configJSON)
 
         return """
         <!doctype html>
@@ -1115,254 +558,301 @@ public struct ApplianceRenderer {
         <head>
             <meta charset="utf-8" />
             <meta name="viewport" content="width=device-width, initial-scale=1" />
-            <title>\(htmlEscape(catalog.name))</title>
+            <title>\(htmlEscape(studio.name))</title>
             <style>
                 :root {
-                    --cream: #f7f3e9;
-                    --ink: #1b1a18;
-                    --clay: #d08c6b;
-                    --sun: #f0b45c;
-                    --sand: #f2e6d2;
-                    --stone: #3c3430;
+                    --bg-1: \(studio.theme.background);
+                    --bg-2: \(studio.theme.backgroundAlt);
+                    --text: \(studio.theme.foreground);
+                    --accent: \(studio.theme.accent);
+                    --accent-soft: \(studio.theme.accentSoft);
+                    --highlight: \(studio.theme.highlight);
                 }
-                * { box-sizing: border-box; }
+                * {
+                    box-sizing: border-box;
+                }
                 body {
                     margin: 0;
-                    font-family: "Futura", "Trebuchet MS", sans-serif;
-                    color: var(--ink);
-                    background: radial-gradient(circle at 20% 20%, rgba(240, 180, 92, 0.25), transparent 55%),
-                                radial-gradient(circle at 80% 10%, rgba(208, 140, 107, 0.2), transparent 50%),
-                                var(--cream);
+                    min-height: 100vh;
+                    background: radial-gradient(circle at 20% 20%, rgba(255, 255, 255, 0.08), transparent 55%),
+                                radial-gradient(circle at 80% 10%, rgba(255, 255, 255, 0.12), transparent 40%),
+                                linear-gradient(135deg, var(--bg-1), var(--bg-2));
+                    color: var(--text);
+                    font-family: "Avenir Next", "Gill Sans", "Trebuchet MS", sans-serif;
+                    letter-spacing: 0.2px;
                 }
-                h1, h2, h3, h4 {
-                    font-family: "Iowan Old Style", "Palatino", "Times New Roman", serif;
-                    margin: 0;
+                body::before {
+                    content: "";
+                    position: fixed;
+                    inset: -20% -10%;
+                    background: radial-gradient(circle at 30% 40%, rgba(255, 200, 120, 0.18), transparent 45%),
+                                radial-gradient(circle at 70% 60%, rgba(60, 240, 220, 0.15), transparent 35%);
+                    filter: blur(10px);
+                    z-index: -2;
                 }
-                main {
-                    max-width: 1160px;
+                body::after {
+                    content: "";
+                    position: fixed;
+                    width: 320px;
+                    height: 320px;
+                    border-radius: 50%;
+                    border: 1px dashed rgba(255, 255, 255, 0.18);
+                    top: -80px;
+                    right: -40px;
+                    opacity: 0.4;
+                    z-index: -1;
+                }
+                .shell {
+                    max-width: 1200px;
                     margin: 0 auto;
                     padding: 48px 28px 80px;
-                    display: grid;
+                    display: flex;
+                    flex-direction: column;
                     gap: 48px;
                 }
                 .hero {
                     display: grid;
-                    gap: 18px;
-                    padding: 28px 32px;
-                    border-radius: 28px;
-                    background: white;
-                    box-shadow: 0 24px 60px rgba(27, 26, 24, 0.12);
-                    animation: rise 0.7s ease-out both;
+                    gap: 16px;
+                    padding: 24px;
+                    background: rgba(0, 0, 0, 0.2);
+                    border: 1px solid rgba(255, 255, 255, 0.1);
+                    border-radius: 24px;
+                    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.35);
+                    animation: fadeUp 0.7s ease-out both;
                 }
                 .hero h1 {
-                    font-size: clamp(2.4rem, 3.2vw, 3.6rem);
+                    margin: 0;
+                    font-family: "Baskerville", "Times New Roman", serif;
+                    font-size: clamp(2.2rem, 3vw, 3.4rem);
                     letter-spacing: 1px;
                 }
                 .hero p {
+                    margin: 0;
                     font-size: 1.05rem;
-                    max-width: 720px;
+                    opacity: 0.85;
                 }
                 .pill-row {
                     display: flex;
                     flex-wrap: wrap;
-                    gap: 10px;
+                    gap: 12px;
                 }
                 .pill {
-                    padding: 6px 12px;
+                    padding: 6px 14px;
                     border-radius: 999px;
-                    background: var(--sand);
+                    background: rgba(255, 255, 255, 0.08);
+                    border: 1px solid rgba(255, 255, 255, 0.18);
                     font-size: 0.85rem;
                 }
-                .section-title {
-                    display: flex;
-                    justify-content: space-between;
-                    align-items: baseline;
-                }
-                .section-title h2 {
-                    font-size: 1.6rem;
-                }
-                .appliance-grid {
+                .section {
                     display: grid;
-                    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+                    gap: 20px;
+                }
+                .section h2 {
+                    margin: 0;
+                    font-size: 1.4rem;
+                    text-transform: uppercase;
+                    letter-spacing: 2px;
+                    color: var(--accent-soft);
+                }
+                .grid {
+                    display: grid;
+                    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
                     gap: 18px;
                 }
-                .appliance {
-                    background: white;
-                    border-radius: 24px;
-                    padding: 20px;
-                    display: grid;
-                    gap: 16px;
-                    box-shadow: 0 18px 40px rgba(27, 26, 24, 0.12);
-                    animation: rise 0.8s ease-out both;
-                }
-                .appliance h3 { font-size: 1.4rem; }
-                .appliance .headline { font-weight: 600; }
-                .appliance .outcome { opacity: 0.8; }
-                .appliance ul {
-                    margin: 0;
-                    padding-left: 20px;
-                    display: grid;
-                    gap: 6px;
-                }
-                .tag {
-                    display: inline-block;
-                    padding: 4px 10px;
-                    border-radius: 999px;
-                    background: var(--sand);
-                    font-size: 0.75rem;
-                    text-transform: uppercase;
-                    letter-spacing: 1.2px;
-                }
-                .ghost {
-                    border: 1px solid var(--stone);
-                    border-radius: 999px;
-                    padding: 8px 14px;
-                    background: transparent;
-                    font-size: 0.85rem;
-                }
-                .setup-grid {
-                    display: grid;
-                    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-                    gap: 16px;
-                }
-                .setup-step {
-                    background: var(--sand);
-                    border-radius: 20px;
-                    padding: 16px;
-                    display: grid;
-                    gap: 12px;
-                    animation: rise 0.8s ease-out both;
-                }
-                .step-index {
-                    font-size: 0.9rem;
-                    font-weight: 600;
-                    color: var(--stone);
-                }
-                .choice {
-                    font-weight: 600;
-                    color: var(--stone);
-                }
-                .plan-grid {
-                    display: grid;
-                    gap: 14px;
-                }
-                .plan-step {
-                    background: white;
+                .card {
+                    background: rgba(0, 0, 0, 0.35);
+                    border: 1px solid rgba(255, 255, 255, 0.14);
                     border-radius: 20px;
                     padding: 18px;
                     display: grid;
-                    gap: 8px;
-                    box-shadow: 0 12px 30px rgba(27, 26, 24, 0.08);
-                    animation: rise 0.9s ease-out both;
+                    gap: 12px;
+                    box-shadow: 0 14px 30px rgba(0, 0, 0, 0.25);
+                    animation: fadeUp 0.7s ease-out both;
                 }
-                .plan-step span {
-                    font-size: 0.85rem;
-                    color: var(--stone);
+                .card-header h3,
+                .bench h3,
+                .flow h3 {
+                    margin: 0;
                 }
-                .guardrails {
-                    background: var(--ink);
-                    color: var(--cream);
+                .eyebrow {
+                    margin: 0 0 6px;
+                    font-size: 0.8rem;
+                    text-transform: uppercase;
+                    letter-spacing: 1.8px;
+                    color: var(--accent-soft);
+                }
+                .card-list {
+                    margin: 0;
+                    padding-left: 18px;
+                    display: grid;
+                    gap: 6px;
+                }
+                .flows {
+                    display: grid;
+                    gap: 20px;
+                }
+                .flow {
+                    background: rgba(8, 12, 16, 0.6);
                     border-radius: 24px;
                     padding: 24px;
+                    border: 1px solid rgba(255, 255, 255, 0.15);
                     display: grid;
+                    gap: 16px;
+                    box-shadow: 0 22px 50px rgba(0, 0, 0, 0.35);
+                    animation: fadeUp 0.8s ease-out both;
+                }
+                .flow header {
+                    display: flex;
+                    justify-content: space-between;
+                    gap: 20px;
+                    flex-wrap: wrap;
+                }
+                .flow-intent {
+                    margin: 6px 0 0;
+                    opacity: 0.8;
+                }
+                .metrics {
+                    display: flex;
+                    gap: 10px;
+                    flex-wrap: wrap;
+                    align-items: center;
+                    font-size: 0.85rem;
+                }
+                .metrics span {
+                    padding: 6px 10px;
+                    border-radius: 999px;
+                    border: 1px solid rgba(255, 255, 255, 0.18);
+                    background: rgba(255, 255, 255, 0.08);
+                }
+                .node-row {
+                    display: grid;
+                    grid-auto-flow: column;
+                    grid-auto-columns: minmax(180px, 1fr);
+                    align-items: stretch;
                     gap: 12px;
+                    overflow-x: auto;
+                    padding-bottom: 8px;
                 }
-                .guardrails ul {
-                    margin: 0;
-                    padding-left: 20px;
-                    display: grid;
-                    gap: 8px;
-                }
-                .config {
-                    background: #101010;
-                    color: #f6f2ea;
+                .node {
+                    background: rgba(255, 255, 255, 0.06);
                     border-radius: 18px;
-                    padding: 20px;
-                    font-family: "SFMono-Regular", "Menlo", "Courier New", monospace;
-                    font-size: 0.78rem;
-                    white-space: pre-wrap;
+                    padding: 14px;
+                    border: 1px solid rgba(255, 255, 255, 0.12);
+                    display: grid;
+                    gap: 6px;
+                    min-width: 180px;
                 }
-                .principles {
-                    background: white;
-                    border-radius: 24px;
-                    padding: 22px;
-                    box-shadow: 0 16px 40px rgba(27, 26, 24, 0.1);
+                .node-kind {
+                    font-size: 0.75rem;
+                    letter-spacing: 1.4px;
+                    text-transform: uppercase;
+                    color: var(--accent-soft);
                 }
-                .principles ul {
+                .node-title {
+                    font-weight: 600;
+                }
+                .node-detail {
+                    font-size: 0.9rem;
+                    opacity: 0.8;
+                }
+                .node-meta {
+                    font-size: 0.75rem;
+                    opacity: 0.7;
+                }
+                .connector {
+                    display: none;
+                }
+                .node.trigger {
+                    border-color: rgba(255, 190, 120, 0.4);
+                }
+                .node.action {
+                    border-color: rgba(120, 255, 210, 0.35);
+                }
+                .node.filter,
+                .node.decision {
+                    border-color: rgba(255, 255, 255, 0.25);
+                }
+                .node.transform,
+                .node.delay {
+                    border-color: rgba(140, 200, 255, 0.35);
+                }
+                .flow-note {
                     margin: 0;
-                    padding-left: 20px;
+                    font-size: 0.85rem;
+                    color: var(--highlight);
+                }
+                .bench-grid {
+                    display: grid;
+                    gap: 16px;
+                    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+                }
+                .bench {
+                    padding: 18px;
+                    border-radius: 20px;
+                    background: rgba(0, 0, 0, 0.32);
+                    border: 1px solid rgba(255, 255, 255, 0.12);
                     display: grid;
                     gap: 8px;
+                    animation: fadeUp 0.8s ease-out both;
                 }
-                footer {
+                .bench ul {
+                    margin: 0;
+                    padding-left: 18px;
+                    display: grid;
+                    gap: 6px;
+                }
+                .footer {
                     font-size: 0.8rem;
                     opacity: 0.6;
                 }
-                @keyframes rise {
-                    from { opacity: 0; transform: translateY(14px); }
-                    to { opacity: 1; transform: translateY(0); }
+                @keyframes fadeUp {
+                    from {
+                        opacity: 0;
+                        transform: translateY(14px);
+                    }
+                    to {
+                        opacity: 1;
+                        transform: translateY(0);
+                    }
+                }
+                @media (max-width: 720px) {
+                    .flow header {
+                        flex-direction: column;
+                        align-items: flex-start;
+                    }
                 }
             </style>
         </head>
         <body>
-            <main>
+            <main class="shell">
                 <section class="hero">
-                    <h1>\(htmlEscape(catalog.name))</h1>
-                    <p>\(htmlEscape(catalog.promise))</p>
+                    <h1>\(htmlEscape(studio.name))</h1>
+                    <p>\(htmlEscape(studio.tagline))</p>
                     <div class="pill-row">
-                        <span class="pill">\(catalog.appliances.count) appliances</span>
-                        <span class="pill">Setup in under 15 minutes</span>
-                        <span class="pill">Mode: \(htmlEscape(recommendation.mode.label))</span>
+                        <span class="pill">Theme: \(htmlEscape(studio.theme.name))</span>
+                        <span class="pill">Integrations: \(studio.integrations.count)</span>
+                        <span class="pill">Flows: \(studio.flows.count)</span>
+                        <span class="pill">Workbenches: \(studio.workbenches.count)</span>
                     </div>
                 </section>
 
-                <section class="principles">
-                    <div class="section-title">
-                        <h2>Built like an appliance</h2>
-                    </div>
-                    <ul>\(principles)</ul>
+                <section class="section">
+                    <h2>Integration Orbit</h2>
+                    <div class="grid">\(integrationCards)</div>
                 </section>
 
-                <section>
-                    <div class="section-title">
-                        <h2>Pick your appliance</h2>
-                        <p>Start with defaults. Change later.</p>
-                    </div>
-                    <div class="appliance-grid">\(applianceCards)</div>
+                <section class="section">
+                    <h2>Automation Theatre</h2>
+                    <div class="flows">\(flowCards)</div>
                 </section>
 
-                <section>
-                    <div class="section-title">
-                        <h2>Three-step setup</h2>
-                        <p>\(htmlEscape(recommendation.appliance.name)) defaults</p>
-                    </div>
-                    <div class="setup-grid">\(setupSteps)</div>
+                <section class="section">
+                    <h2>Workbenches</h2>
+                    <div class="bench-grid">\(workbenchCards)</div>
                 </section>
 
-                <section>
-                    <div class="section-title">
-                        <h2>Automation plan</h2>
-                        <p>\(htmlEscape(recommendation.appliance.outcome))</p>
-                    </div>
-                    <div class="plan-grid">\(planSteps)</div>
-                </section>
-
-                <section class="guardrails">
-                    <h2>Guardrails</h2>
-                    <p>Visible, editable, and always human-first.</p>
-                    <ul>\(guardrails)</ul>
-                </section>
-
-                <section>
-                    <div class="section-title">
-                        <h2>Appliance config (export)</h2>
-                        <p>Drop this into the running API as-is.</p>
-                    </div>
-                    <div class="config">\(configSnippet)</div>
-                </section>
-
-                <footer>
-                    Rendered locally. Tune the appliance definitions to ship a real product.
+                <footer class="footer">
+                    Rendered locally by StudioRenderer. Edit the Swift models to remix the universe.
                 </footer>
             </main>
         </body>
@@ -1371,17 +861,20 @@ public struct ApplianceRenderer {
     }
 }
 
-private func recommendationSelection(for step: SetupStep) -> SetupOption {
-    if let recommended = step.options.first(where: { $0.isRecommended }) {
-        return recommended
+private func renderNodeLine(_ nodes: [AutomationNode]) -> String {
+    nodes.map { node in
+        let integration = node.integrationName.map { " (\($0))" } ?? ""
+        return "[\(node.kind.label): \(node.title)\(integration)]"
+    }.joined(separator: " -> ")
+}
+
+private func stableIndex(seed: String, modulus: Int) -> Int {
+    guard modulus > 0 else { return 0 }
+    var value = 0
+    for scalar in seed.unicodeScalars {
+        value = (value * 31 + Int(scalar.value)) % modulus
     }
-    return step.options.first ?? SetupOption(
-        id: "none",
-        label: "",
-        detail: "",
-        adjustments: [],
-        isRecommended: false
-    )
+    return value
 }
 
 private func htmlEscape(_ value: String) -> String {
@@ -1390,4 +883,4 @@ private func htmlEscape(_ value: String) -> String {
         .replacingOccurrences(of: "<", with: "&lt;")
         .replacingOccurrences(of: ">", with: "&gt;")
         .replacingOccurrences(of: "\"", with: "&quot;")
-}
+
