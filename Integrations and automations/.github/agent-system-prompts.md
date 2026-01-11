@@ -305,5 +305,4 @@ When approaching a new integration, use this prompt:
 > 5. **Composition**: How does this layer with other integrations?
 > 6. **Observability**: What does an agent need to debug?
 > 
-> Before writing code, I'll reason through each of these explicitly."
-
+> 

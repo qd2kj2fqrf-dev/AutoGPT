@@ -7,3 +7,6 @@ DerivedData/
 .swiftpm/xcode/package.xcworkspace/contents.xcworkspacedata
 .netrc
 Integrations Studio Preview.html
+
+# Reference files - not part of build
+/Reference/
